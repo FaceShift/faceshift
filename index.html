@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html>
-
 <head>
   <meta charset="UTF-8">
   <title>FaceShift</title>
 </head>
 
 <body>
+  <video id="_webcam" playsinline></video>
   <h1>Move your face, Move your mouse</h1>
   <!-- All of the Node.js APIs are available in this renderer process. -->
   <script>
     // You can also require other files to run in this process
-    require('./renderer.js')
+    require("./src/app.js");
   </script>
 </body>
 
