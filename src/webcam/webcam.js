@@ -23,4 +23,12 @@ startCamera = () => {
   .catch(() => {alert("No camera available")});
 };
 
-module.exports = { startCamera };
+onStreamDimensionsAvailable = (callback) => {
+  if (webcam.videoWidth === 0) {
+    setTimeout(function() {onStreamDimensionsAvailable(callback)}, 100);
+  } else {
+    callback();
+  }
+};
+
+module.exports = { startCamera, onStreamDimensionsAvailable };
