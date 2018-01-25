@@ -11,5 +11,12 @@
     "start": "electron ."
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@google-cloud/common-grpc": "^0.5.3",
+    "@google-cloud/speech": "^1.0.1",
+    "grpc": "^1.8.4",
+    "node-record-lpcm16": "^0.3.0",
+    "request": "^2.83.0"
+  }
 }
