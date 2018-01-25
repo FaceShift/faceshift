@@ -13,6 +13,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "electron": "^1.7.11",
     "robotjs": "^0.4.7"
+  },
+  "devDependencies": {
+    "electron-rebuild": "^1.7.3"
   }
 }

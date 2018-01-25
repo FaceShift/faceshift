@@ -22,4 +22,6 @@ moveUpDown = (pixels) => {
   }
 }
 
-setInterval(() => moveUpDown(-10), 1000);
+//setInterval(() => moveUpDown(-10), 1000);
+
+module.exports = { moveUpDown, moveLeftRight };

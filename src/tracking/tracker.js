@@ -1,4 +1,5 @@
 let draw = require("./draw");
+let mouse = require("../peripheral/mouse");
 
 //Used in point tracking
 var pointsToAdd = [];
@@ -9,6 +10,9 @@ var imageData;
 var brfManager;
 var resolution;
 var brfv4;
+
+//For tracking face move offsets
+var lastXYs = [];
 
 function startTrackFaces(_webcam, _imageData, _brfManager, _resolution, _brfv4) {
   webcam = _webcam;
@@ -40,6 +44,27 @@ function trackFaces() {
       face.state === brfv4.BRFState.FACE_TRACKING) {
       faceFound = true;
       imageDataCtx.strokeStyle = "#00a0ff";
+      
+      //Check offsets
+      var newXYs = [];
+      newXYs.push([face.vertices[60], face.vertices[61]]); //Tip of nose
+      newXYs.push([face.vertices[66], face.vertices[67]]); //Middle base of nose
+      newXYs.push([face.vertices[78], face.vertices[79]]); //Inside of users right eye (eye on left of screen)
+      newXYs.push([face.vertices[84], face.vertices[85]]); //Inside of users left eye (eye on right of screen)
+      if (lastXYs.length > 0) {
+        var xTotal = 0;
+        var yTotal = 0;
+        for (var j = 0; j < newXYs.length; j++) {
+          xTotal += newXYs[j][0] - lastXYs[j][0];
+          yTotal += newXYs[j][1] - lastXYs[j][1];
+        }
+        xTotal /= newXYs.length;
+        yTotal /= newXYs.length;
+
+        mouse.moveLeftRight(xTotal*10);
+        mouse.moveUpDown(yTotal*10);
+      }
+      lastXYs = newXYs;
 
       //Draw dots
       for (var k = 0; k < face.vertices.length; k += 2) {
