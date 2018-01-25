@@ -11,5 +11,8 @@
     "start": "electron ."
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "robotjs": "^0.4.7"
+  }
 }
