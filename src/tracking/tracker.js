@@ -55,7 +55,7 @@ function trackFaces() {
         var xTotal = 0;
         var yTotal = 0;
         for (var j = 0; j < newXYs.length; j++) {
-          xTotal += newXYs[j][0] - lastXYs[j][0];
+          xTotal += newXYs[j][0] - lastXYs[j][0]; 
           yTotal += newXYs[j][1] - lastXYs[j][1];
         }
         xTotal /= newXYs.length;
