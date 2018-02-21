@@ -38,7 +38,7 @@ function initSDK() {
   brfManager.setMode(brfv4.BRFMode.FACE_TRACKING);
   brfManager.setOpticalFlowParams(21, 4, 50, 0.00005);
   brfManager.setOpticalFlowCheckPointsValidBeforeTracking(true);
-  imageData.addEventListener("click", tracker.onClicked);
+  /*imageData.addEventListener("click", tracker.onClicked);*/
   imageData.mouseEnabled = true;
 
   tracker.startTrackFaces(webcam, imageData, brfManager, resolution, brfv4);
