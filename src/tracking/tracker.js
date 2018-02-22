@@ -1,12 +1,17 @@
 let draw = require("./draw");
 let mouse = require("../peripheral/mouse");
+let blink = require("./blink");
 
 //Used in point tracking
-var pointsToAdd = [];
-var lostFacePoints = [];
-var firstLoopNoFace = true;
-var lastXYs = []; //For tracking face move offsets
+var pointsToAdd = [];       //Used in tracking after face is lost
+var lostFacePoints = [];    //Used in tracking after face is lost
+var firstLoopNoFace = true; //Used in tracking after face is lost
+var lastXYs = [];           //For tracking face move offsets
+var prevWholeFace = [];     //Used to detect blinks/facial changes
 
+var userBlinked = false; //Used to change line color
+
+//Camera/Library variables
 var webcam;
 var imageData;
 var brfManager;
@@ -43,7 +48,6 @@ function trackFaces() {
     if (face.state === brfv4.BRFState.FACE_TRACKING_START ||
       face.state === brfv4.BRFState.FACE_TRACKING) {
       faceFound = true;
-      imageDataCtx.strokeStyle = "#00a0ff";
       
       //Check offsets
       var newXYs = [];
@@ -60,12 +64,32 @@ function trackFaces() {
         lastXYs = [];
       }
       firstLoopNoFace = true;
+
+      //Click if user has blinked
+      if (prevWholeFace != []) {
+        blinkRet = blink.blinked(prevWholeFace, face.vertices);
+        userBlinked = blinkRet.waitingForTimeout;
+        if (blinkRet.left && blinkRet.right) {
+          //Maybe do something when both eyes blink?
+        }
+        else if (blinkRet.left) {
+          mouse.mouseLeftClick();
+        }
+        else if (blinkRet.right) {
+          mouse.mouseRightClick();
+        }
+      }
+      prevWholeFace = face.vertices.slice(); //Copys by value instead of by reference
       
       //Move the mouse!
       moveMouse(lastXYs, newXYs);
 
       //Set last face coords to current face coords
       lastXYs = newXYs;
+
+      //Set stroke color based on whether or not user was blinking
+      // yellow = blink, blue = normal (no blink)
+      imageDataCtx.strokeStyle = userBlinked ? "#e6e600" /*yellow*/: "#00a0ff"; /*blue*/
 
       //Draw dots
       for (var k = 0; k < face.vertices.length; k += 2) {
@@ -96,7 +120,7 @@ function trackFaces() {
       if (states[i]) { //Valid
         imageDataCtx.strokeStyle = "#00ff00";
         draw.drawPoint(imageDataCtx, opticalPoints[i].x, opticalPoints[i].y, 3)
-      } else { //Invalid
+      } else { //Invalid (Should never happen because setOpticalFlowCheckPointsValidBeforeTracking is set to true)
         imageDataCtx.strokeStyle = "#ff0000";
         draw.drawPoint(imageDataCtx, opticalPoints[i].x, opticalPoints[i].y, 3)
       }
@@ -159,8 +183,9 @@ function moveMouse(xy1/*Prev*/, xy2/*New*/) {
     xTotal /= xy2.length;
     yTotal /= xy2.length;
 
-    mouse.moveLeftRight(xTotal*10);
-    mouse.moveUpDown(yTotal*10);
+    var factor = 10;
+    mouse.moveLeftRight(xTotal*factor);
+    mouse.moveUpDown(yTotal*factor);
   }
 }
 

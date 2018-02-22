@@ -22,6 +22,12 @@ moveUpDown = (pixels) => {
   }
 }
 
-//setInterval(() => moveUpDown(-10), 1000);
+mouseLeftClick = () => {
+  robot.mouseClick("left");
+}
 
-module.exports = { moveUpDown, moveLeftRight };
+mouseRightClick = () => {
+  robot.mouseClick("right");
+}
+
+module.exports = { moveUpDown, moveLeftRight, mouseLeftClick, mouseRightClick };
