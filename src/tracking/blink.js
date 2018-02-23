@@ -51,9 +51,12 @@ function blinked(v1, v2) {
      * but the program only registered one eye to have blinked. 
      * 
      * Case 1:
-     * If the ratio of eye to face movement for the right eye is close
-     * (within ratioLimit/2) to the ratio of eye to face movement for the left 
-     * eye, it is safe to assume they both blinked.
+     * If the ratio of eye to face movement for one eye is close
+     * (within 50%) to the ratio of eye to face movement for the other 
+     * eye, it is safe to assume they both blinked. OR if one eye is seen
+     * to have blinked, and the other eye that has not been detected as 
+     * blinking is atleast 0.75&ratioLimit, it is safe to assume that both
+     * eyes blinked
      * 
      * Case 2:
      * If both eyes surpassed the ratio, but one of them didn't meet the
@@ -68,7 +71,11 @@ function blinked(v1, v2) {
      * This method for detecting blinks still produces some false positives, but
      * it is surprisingly accurate given its simplicity.
      */ 
-    if (Math.abs(leftBlinkRatio - rightBlinkRatio) < (ratioLimit/2)) { //Case 1
+    /*if (Math.abs(leftBlinkRatio - rightBlinkRatio) < (ratioLimit/2)) { //Case 1 (OLD)
+      leftBlinkOccurred = rightBlinkOccurred = true;
+    }*/
+    if (Math.max(leftBlinkRatio, rightBlinkRatio)/Math.min(leftBlinkRatio, rightBlinkRatio) < 2 ||
+        Math.min(leftBlinkRatio, rightBlinkRatio) > 0.75*ratioLimit) { //Case 1
       leftBlinkOccurred = rightBlinkOccurred = true;
     }
     else if ((leftBlinkRatio > ratioLimit && rightBlinkRatio > ratioLimit) && 
@@ -77,11 +84,11 @@ function blinked(v1, v2) {
     }
     else { //Only one eye blinked
       //Log for testing purposes
-      /*console.log("L-Ratio: " + leftBlinkRatio.toFixed(2) + 
+      console.log("L-Ratio: " + leftBlinkRatio.toFixed(2) + 
       "\nR-Ratio: " + rightBlinkRatio.toFixed(2) + 
       "\nLeft: " + yLE.toFixed(2) + 
       "\nRight: " + yRE.toFixed(2) + 
-      "\nNose: " + yN.toFixed(2));*/
+      "\nNose: " + yN.toFixed(2));
 
       blinkOccurred();
     }
