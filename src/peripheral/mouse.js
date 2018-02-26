@@ -7,7 +7,7 @@ const maxWidth = screenSize.width;
 let mousePos = robot.getMousePos();
 
 // Move in the horizontal direction
-moveLeftRight = (pixels) => {
+let moveLeftRight = (pixels) => {
   if(mousePos.x + pixels <= maxWidth && mousePos.x + pixels >= 0){
     mousePos = robot.getMousePos();
     robot.moveMouse(mousePos.x + pixels, mousePos.y);
@@ -15,7 +15,7 @@ moveLeftRight = (pixels) => {
 }
 
 // Move in the vertical direction
-moveUpDown = (pixels) => {
+let moveUpDown = (pixels) => {
   if(mousePos.y + pixels <= maxHeight && mousePos.y + pixels >= 0){
     mousePos = robot.getMousePos();
     robot.moveMouse(mousePos.x, mousePos.y + pixels);
