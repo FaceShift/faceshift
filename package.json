@@ -13,9 +13,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "node-record-lpcm16": "^0.3.0",
     "@google-cloud/speech": "^1.0.1",
-    "request": "^2.83.0"
+    "node-record-lpcm16": "^0.3.0",
+    "request": "^2.83.0",
+    "robojs": "^5.5.0"
   },
   "devDependencies": {
     "electron-packager": "^10.1.2"
