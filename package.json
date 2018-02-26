@@ -16,9 +16,11 @@
     "@google-cloud/speech": "^1.0.1",
     "node-record-lpcm16": "^0.3.0",
     "request": "^2.83.0",
+    "electron": "^1.7.11",
     "robojs": "^5.5.0"
   },
   "devDependencies": {
+    "electron-rebuild": "^1.7.3",
     "electron-packager": "^10.1.2"
   }
 }
