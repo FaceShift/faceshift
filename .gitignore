@@ -57,5 +57,11 @@ typings/
 # dotenv environment variables file
 .env
 
+# Mac
 .DS_Store
+
+# Visual Studio Code
 .vscode/settings.json
+
+# Test Resources
+resources/

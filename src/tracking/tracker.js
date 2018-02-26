@@ -1,9 +1,17 @@
 let draw = require("./draw");
+let mouse = require("../peripheral/mouse");
+let blink = require("./blink");
 
 //Used in point tracking
-var pointsToAdd = [];
-var numTrackedPoints = 0;
+var pointsToAdd = [];       //Used in tracking after face is lost
+var lostFacePoints = [];    //Used in tracking after face is lost
+var firstLoopNoFace = true; //Used in tracking after face is lost
+var lastXYs = [];           //For tracking face move offsets
+var prevWholeFace = [];     //Used to detect blinks/facial changes
 
+var userBlinked = false; //Used to change line color
+
+//Camera/Library variables
 var webcam;
 var imageData;
 var brfManager;
@@ -20,10 +28,11 @@ function startTrackFaces(_webcam, _imageData, _brfManager, _resolution, _brfv4) 
 }
 
 function trackFaces() {
-  //Add points to be tracked
+  //Add manual points to be tracked
   if (pointsToAdd.length > 0) {
+    brfManager.reset();
     brfManager.addOpticalFlowPoints(pointsToAdd);
-    pointsToAdd.length = 0;
+    pointsToAdd = [];
   }
 
   var imageDataCtx = imageData.getContext("2d");
@@ -39,7 +48,48 @@ function trackFaces() {
     if (face.state === brfv4.BRFState.FACE_TRACKING_START ||
       face.state === brfv4.BRFState.FACE_TRACKING) {
       faceFound = true;
-      imageDataCtx.strokeStyle = "#00a0ff";
+      
+      //Check offsets
+      var newXYs = [];
+      newXYs.push([face.vertices[60], face.vertices[61]]); //Tip of nose
+      newXYs.push([face.vertices[66], face.vertices[67]]); //Middle base of nose
+      newXYs.push([face.vertices[78], face.vertices[79]]); //Inside of users right eye (eye on left of screen)
+      newXYs.push([face.vertices[84], face.vertices[85]]); //Inside of users left eye (eye on right of screen)
+      
+      //Update lost face!
+      lostFacePoints = newXYs;   
+
+      //If first time in here after no face was found, clear old array of lastXYs
+      if (!firstLoopNoFace) {
+        lastXYs = [];
+      }
+      firstLoopNoFace = true;
+
+      //Click if user has blinked
+      if (prevWholeFace != []) {
+        blinkRet = blink.blinked(prevWholeFace, face.vertices);
+        userBlinked = blinkRet.waitingForTimeout;
+        if (blinkRet.left && blinkRet.right) {
+          //Maybe do something when both eyes blink?
+        }
+        else if (blinkRet.left) {
+          mouse.mouseLeftClick();
+        }
+        else if (blinkRet.right) {
+          mouse.mouseRightClick();
+        }
+      }
+      prevWholeFace = face.vertices.slice(); //Copys by value instead of by reference
+      
+      //Move the mouse!
+      moveMouse(lastXYs, newXYs);
+
+      //Set last face coords to current face coords
+      lastXYs = newXYs;
+
+      //Set stroke color based on whether or not user was blinking
+      // yellow = blink, blue = normal (no blink)
+      imageDataCtx.strokeStyle = userBlinked ? "#e6e600" /*yellow*/: "#00a0ff"; /*blue*/
 
       //Draw dots
       for (var k = 0; k < face.vertices.length; k += 2) {
@@ -57,8 +107,47 @@ function trackFaces() {
       }
     }
   }
+
   //If no faces were found, draw rectangles where brfv4 is trying to locate faces
+  //Also, begin tracking lostFacePoints until a face is found again
   if (!faceFound) {
+    //Get points being tracked
+    var opticalPoints = brfManager.getOpticalFlowPoints();
+    var states = brfManager.getOpticalFlowPointStates();
+
+    // Draw points by state: green valid, red invalid
+    for (i = 0; i < opticalPoints.length; i++) {
+      if (states[i]) { //Valid
+        imageDataCtx.strokeStyle = "#00ff00";
+        draw.drawPoint(imageDataCtx, opticalPoints[i].x, opticalPoints[i].y, 3)
+      } else { //Invalid (Should never happen because setOpticalFlowCheckPointsValidBeforeTracking is set to true)
+        imageDataCtx.strokeStyle = "#ff0000";
+        draw.drawPoint(imageDataCtx, opticalPoints[i].x, opticalPoints[i].y, 3)
+      }
+    }
+
+    //Move mouse based on lostFacePoints movement
+
+    //If this is the first time in this code block after brfv4 failed to find a face:
+    if (firstLoopNoFace) {
+      for (var i = 0; i < lostFacePoints.length; i++) {
+        var pt = lostFacePoints[i];
+        pointsToAdd.push(new brfv4.Point(pt[0], pt[1]));
+      }
+      firstLoopNoFace = false;
+    }
+    //If this code has already been run:
+    else {
+      lostFacePoints = [];
+      for (var i = 0; i < opticalPoints.length; i++) {
+        var pt = opticalPoints[i];
+        lostFacePoints.push([pt.x, pt.y]);
+      }
+      moveMouse(lastXYs, lostFacePoints)
+      lastXYs = lostFacePoints;
+    }
+
+    //Rectangles
     var rectangles = brfManager.getAllDetectedFaces();
     for (var i = 0; i < rectangles.length; i++) {
       rect = rectangles[i];
@@ -71,50 +160,33 @@ function trackFaces() {
     }
   }
 
-  //Get points being tracked
-  var points = brfManager.getOpticalFlowPoints();
-  var states = brfManager.getOpticalFlowPointStates();
-
-  // Draw points by state: green valid, red invalid
-  for (i = 0; i < points.length; i++) {
-    if (states[i]) { //Valid
-      imageDataCtx.strokeStyle = "#00ff00";
-      draw.drawPoint(imageDataCtx, points[i].x, points[i].y, 3)
-    } else { //Invalid
-      imageDataCtx.strokeStyle = "#ff0000";
-      draw.drawPoint(imageDataCtx, points[i].x, points[i].y, 3)
-    }
-  }
-
-  if (points.length !== numTrackedPoints) {
-    numTrackedPoints = points.length;
-  }
-
+  //Update
   requestAnimationFrame(trackFaces);
 }
 
-function onClicked(event) {
+/*function onClicked(event) {
   var x = event.pageX;
   var y = event.pageY;
 
   // Add 1 point:
   pointsToAdd.push(new brfv4.Point(x, y));
+}*/
 
-  //Add 100 points
-  /*var w = 60.0;
-  var step = 6.0;
-  var xStart = x - w * 0.5;
-  var xEnd = x + w * 0.5;
-  var yStart = y - w * 0.5;
-  var yEnd = y + w * 0.5;
-  var dy = yStart;
-  var dx = xStart;
+function moveMouse(xy1/*Prev*/, xy2/*New*/) {
+  if (xy1.length > 0) {
+    var xTotal = 0;
+    var yTotal = 0;
+    for (var j = 0; j < xy2.length; j++) {
+      xTotal += xy2[j][0] - xy1[j][0]; 
+      yTotal += xy2[j][1] - xy1[j][1];
+    }
+    xTotal /= xy2.length;
+    yTotal /= xy2.length;
 
-  for(; dy < yEnd; dy += step) {
-      for(dx = xStart; dx < xEnd; dx += step) {
-          pointsToAdd.push(new brfv4.Point(dx, dy));
-      }
-  }*/
+    var factor = 10;
+    mouse.moveLeftRight(xTotal*factor);
+    mouse.moveUpDown(yTotal*factor);
+  }
 }
 
-module.exports = { startTrackFaces, onClicked };
+module.exports = { startTrackFaces/*, onClicked*/ };
