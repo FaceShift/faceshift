@@ -74,7 +74,7 @@ function blinked(v1, v2) {
     /*if (Math.abs(leftBlinkRatio - rightBlinkRatio) < (ratioLimit/2)) { //Case 1 (OLD)
       leftBlinkOccurred = rightBlinkOccurred = true;
     }*/
-    if (Math.max(leftBlinkRatio, rightBlinkRatio)/Math.min(leftBlinkRatio, rightBlinkRatio) < 2 ||
+    if (Math.max(leftBlinkRatio, rightBlinkRatio)/Math.min(leftBlinkRatio, rightBlinkRatio) < /*2*/1.75 ||
         Math.min(leftBlinkRatio, rightBlinkRatio) > 0.75*ratioLimit) { //Case 1
       leftBlinkOccurred = rightBlinkOccurred = true;
     }
