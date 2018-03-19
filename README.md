@@ -3,11 +3,13 @@ An electron app that uses facial tracking to move your mouse cursor.
 
 ## Pre-requisites 
 
-* Node + npm
+* Node
+
+* [Yarn](https://yarnpkg.com/lang/en/docs/install/ )
 
 * Electron 
 ```
-$ npm install -g electron
+$ yarn global add electron
 ```
 
 ## Run the project
@@ -15,9 +17,13 @@ $ npm install -g electron
 ```
 $ git clone https://github.com/FaceShift/faceshift.git
 ```
-2. Run the project
+2. Build the project
 ```
 $ cd faceshift
-$ npm install
-$ npm start
+$ yarn
+$ yarn watch
+```
+3. Run the project (open a different terminal/command window)
+```
+$ yarn start
 ```
