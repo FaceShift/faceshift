@@ -1,25 +1,33 @@
-var robot = require("robotjs");
+const robot = require("robotjs");
 
-// Resolution of the 
+// Resolution of the
 const screenSize = robot.getScreenSize();
 const maxHeight = screenSize.height;
 const maxWidth = screenSize.width;
 let mousePos = robot.getMousePos();
 
 // Move in the horizontal direction
-let moveLeftRight = (pixels) => {
-  if(mousePos.x + pixels <= maxWidth && mousePos.x + pixels >= 0){
+moveLeftRight = (pixels) => {
+  if(mousePos.x <= maxWidth && mousePos.x >= 0){
     mousePos = robot.getMousePos();
     robot.moveMouse(mousePos.x + pixels, mousePos.y);
   }
-}
+};
 
 // Move in the vertical direction
-let moveUpDown = (pixels) => {
-  if(mousePos.y + pixels <= maxHeight && mousePos.y + pixels >= 0){
+moveUpDown = (pixels) => {
+  if(mousePos.y <= maxHeight && mousePos.y >= 0){
     mousePos = robot.getMousePos();
     robot.moveMouse(mousePos.x, mousePos.y + pixels);
   }
-}
+};
 
-module.exports = { moveUpDown, moveLeftRight };
+mouseLeftClick = () => {
+  robot.mouseClick("left");
+};
+
+mouseRightClick = () => {
+  robot.mouseClick("right");
+};
+
+module.exports = { moveUpDown, moveLeftRight, mouseLeftClick, mouseRightClick };
