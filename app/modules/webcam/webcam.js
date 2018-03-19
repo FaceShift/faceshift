@@ -10,7 +10,7 @@ startCamera = () => {
   let onMediaStream = (mediaStream) => {
     webcam.srcObject = mediaStream;
     webcam.play();
-  }
+  };
 
   window.navigator.mediaDevices.getUserMedia({
     video: {
@@ -19,16 +19,20 @@ startCamera = () => {
       frameRate: 30,
     }
   })
-  .then(onMediaStream)
-  .catch(() => {alert("No camera available")});
+    .then(onMediaStream)
+    .catch(() => {
+      alert("No camera available")
+    });
 };
 
 onStreamDimensionsAvailable = (callback) => {
   if (webcam.videoWidth === 0) {
-    setTimeout(function() {onStreamDimensionsAvailable(callback)}, 100);
+    setTimeout(function () {
+      onStreamDimensionsAvailable(callback)
+    }, 100);
   } else {
     callback();
   }
 };
 
-module.exports = { startCamera, onStreamDimensionsAvailable };
+module.exports = {startCamera, onStreamDimensionsAvailable};
