@@ -24,6 +24,8 @@ $ yarn
 $ yarn watch
 ```
 3. Run the project (open a different terminal/command window)
+
 ```
-$ yarn start
+Mac $ yarn start-mac
+Windows $ yarn start-win
 ```
