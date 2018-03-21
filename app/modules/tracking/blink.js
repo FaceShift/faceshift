@@ -84,11 +84,11 @@ function blinked(v1, v2) {
     }
     else { //Only one eye blinked
       //Log for testing purposes
-      console.log("L-Ratio: " + leftBlinkRatio.toFixed(2) +
+      /*console.log("L-Ratio: " + leftBlinkRatio.toFixed(2) +
         "\nR-Ratio: " + rightBlinkRatio.toFixed(2) +
         "\nLeft: " + yLE.toFixed(2) +
         "\nRight: " + yRE.toFixed(2) +
-        "\nNose: " + yN.toFixed(2));
+        "\nNose: " + yN.toFixed(2));*/
 
       blinkOccurred();
     }

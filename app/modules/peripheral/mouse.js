@@ -22,6 +22,10 @@ moveUpDown = (pixels) => {
   }
 };
 
+scrollUpDown = (pixels) => {
+  robot.scrollMouse(0,pixels);
+}
+
 mouseLeftClick = () => {
   robot.mouseClick("left");
 };
@@ -30,4 +34,4 @@ mouseRightClick = () => {
   robot.mouseClick("right");
 };
 
-module.exports = { moveUpDown, moveLeftRight, mouseLeftClick, mouseRightClick };
+module.exports = { moveUpDown, moveLeftRight, mouseLeftClick, mouseRightClick, scrollUpDown};

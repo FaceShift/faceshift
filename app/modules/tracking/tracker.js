@@ -177,8 +177,39 @@ function moveMouse(xy1/*Prev*/, xy2/*New*/) {
     yTotal /= xy2.length;
 
     let factor = 10;
-    mouse.moveLeftRight(xTotal*factor);
-    mouse.moveUpDown(yTotal*factor);
+    
+    //Perform action based on current mode:
+    if (preferences.getMode() == "mouse") {
+      mouse.moveLeftRight(xTotal*factor);
+      mouse.moveUpDown(yTotal*factor);
+    }
+    else if (preferences.getMode() == "scroll") {
+      /* TESTING NOTES!!!
+        If within 20-50ish pxls of midpoint, dont scroll.
+        After that, scroll as a pecentage of how high above or
+        low below midpoint multiplied by some factor (50???)
+      */
+      if (xy2.length < 1)
+        return;
+      factor = 225;
+      pt = xy2[0]; //Only care about middle nose point
+      mid = resolution.height/2;
+      midSect = 1/8;
+      midSectTop = mid - (midSect*resolution.height*0.5);
+      midSectBtm = mid + (midSect*resolution.height*0.5);
+
+      //Scroll up or down at a rate that is based on how far away from 
+      // the middle of the screen the users nose is.
+      //*If nose is in the middle 1/8th of the screen, no scrolling.
+      if (pt[1] > midSectBtm) {
+        let percent = (pt[1]-midSectBtm)/(resolution.height - midSectBtm);
+        mouse.scrollUpDown(-factor*percent);
+      }
+      else if (pt[1] < midSectTop) {
+        let percent = -(pt[1]-midSectTop)/(midSectTop);
+        mouse.scrollUpDown(factor*percent);
+      }
+    }
   }
 }
 
