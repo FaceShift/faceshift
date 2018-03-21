@@ -14,8 +14,8 @@ startCamera = () => {
 
   window.navigator.mediaDevices.getUserMedia({
     video: {
-      width: 640,
-      height: 480,
+      width: 320,
+      height: 240,
       frameRate: 30,
     }
   })
