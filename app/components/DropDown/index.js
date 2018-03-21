@@ -1,9 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import DropDownMenu from "material-ui/DropDownMenu";
-import MenuItem from 'material-ui/MenuItem';
+import MenuItem from "material-ui/MenuItem";
 
-class DropDown extends React.Component{
+class DropDown extends React.Component {
 
   static propTypes = {
     options: PropTypes.array,
@@ -14,11 +14,11 @@ class DropDown extends React.Component{
 
   renderOptions = () => (
     this.props.options.map(
-      (option, index) => <MenuItem value={index} primaryText={option} />
+      (option, index) => <MenuItem key={index} value={index} primaryText={option}/>
     )
   );
 
-  render(){
+  render() {
     return (
       <DropDownMenu>
         {this.renderOptions()}
@@ -26,4 +26,5 @@ class DropDown extends React.Component{
     )
   }
 }
+
 export default DropDown;
