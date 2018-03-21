@@ -1,6 +1,7 @@
 let draw = require("./draw");
 let mouse = require("../peripheral/mouse");
 let blink = require("./blink");
+let preferences = require("../../preferences/preferences");
 
 //Used in point tracking
 let pointsToAdd = [];       //Used in tracking after face is lost
@@ -164,13 +165,6 @@ function trackFaces() {
   requestAnimationFrame(trackFaces);
 }
 
-/*function onClicked(event) {
-  let x = event.pageX;
-  let y = event.pageY;
-  // Add 1 point:
-  pointsToAdd.push(new brfv4.Point(x, y));
-}*/
-
 function moveMouse(xy1/*Prev*/, xy2/*New*/) {
   if (xy1.length > 0) {
     let xTotal = 0;
@@ -188,4 +182,4 @@ function moveMouse(xy1/*Prev*/, xy2/*New*/) {
   }
 }
 
-module.exports = { startTrackFaces/*, onClicked*/ };
+module.exports = { startTrackFaces };
