@@ -6,6 +6,7 @@ class Home extends React.Component{
     return(
       <div>
         FaceShift
+        <input type="number" />
       </div>
     );
   }
