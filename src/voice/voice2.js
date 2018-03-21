@@ -56,6 +56,7 @@ function trainVoiceModel(waveFilePaths) {
   var url = 'https://snowboy.kitt.ai/api/v1/train/'
   var options = {
     method: 'post',
+    encoding: null,
     body: postData,
     json: true,
     url: url
@@ -68,7 +69,7 @@ function trainVoiceModel(waveFilePaths) {
       var modelLocation = "resources/voice-models/voice-model.pmdl"
       console.log("Model created")
       console.log("Writing voice model to " + modelLocation);
-      fs.writeFile(modelLocation, body, 'binary', function (err) {
+      fs.writeFile(modelLocation, body, 'latin1', function (err) {
         if (err) {
           console.log(err)
         } else {
