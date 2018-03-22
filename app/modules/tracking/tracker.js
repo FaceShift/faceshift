@@ -74,7 +74,12 @@ function trackFaces() {
           //Maybe do something when both eyes blink?
         }
         else if (blinkRet.left) {
-          mouse.mouseLeftClick();
+          //If in drag mode, left blink will toggle mouse down/up.
+          // else, left blink will left click mouse.
+          if (preferences.getMode() == "drag")
+            mouse.toggleBtnUpDwn();
+          else
+            mouse.mouseLeftClick();
         }
         else if (blinkRet.right) {
           mouse.mouseRightClick();
@@ -183,12 +188,11 @@ function moveMouse(xy1/*Prev*/, xy2/*New*/) {
       mouse.moveLeftRight(xTotal*factor);
       mouse.moveUpDown(yTotal*factor);
     }
+    else if (preferences.getMode() == "drag") {
+      mouse.dragLeftRight(xTotal*factor);
+      mouse.dragUpDown(yTotal*factor);
+    }
     else if (preferences.getMode() == "scroll") {
-      /* TESTING NOTES!!!
-        If within 20-50ish pxls of midpoint, dont scroll.
-        After that, scroll as a pecentage of how high above or
-        low below midpoint multiplied by some factor (50???)
-      */
       if (xy2.length < 1)
         return;
       factor = 225;

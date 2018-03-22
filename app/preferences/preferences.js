@@ -1,3 +1,4 @@
+let mouse = require("../modules/peripheral/mouse");
 const fs = require('fs');
 
 /*
@@ -67,6 +68,8 @@ function updateNext() {
       console.log(err);
       jsonPreferences[key] = origVal;
     }
+    if (key=="mode" && val!="drag")
+      mouse.toggleBtnUpDwn("up"); //Whenever mode switches away from drag mode, make sure mouse goes up.
     updateNext()
   });
 }
