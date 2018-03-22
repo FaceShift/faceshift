@@ -1,10 +1,13 @@
 // Gets the video tag (id: _webcam) from index.html
 let webcam = document.getElementById("_webcam");
 
+let startCamera, stopCamera, onStreamDimensionsAvailable;
+
 /**
  * Starts the webcam camera
  */
 startCamera = () => {
+  console.log("started");
 
   // When the media stream is received, set the webcam element to the stream
   let onMediaStream = (mediaStream) => {
@@ -25,6 +28,10 @@ startCamera = () => {
     });
 };
 
+stopCamera = () => {
+  console.log("stopped");
+};
+
 onStreamDimensionsAvailable = (callback) => {
   if (webcam.videoWidth === 0) {
     setTimeout(function () {
@@ -35,4 +42,4 @@ onStreamDimensionsAvailable = (callback) => {
   }
 };
 
-module.exports = {startCamera, onStreamDimensionsAvailable};
+module.exports = {startCamera, stopCamera, onStreamDimensionsAvailable};
