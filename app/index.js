@@ -1,4 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import App from "./components/App";
 
-ReactDOM.render(<div>FaceShift yo</div>, document.getElementById('content'));
+ReactDOM.render(<App/>, document.getElementById('content'));
