@@ -6,10 +6,10 @@ const fs = require('fs');
 * "mouse", "scroll", "drag"
 * 
 * left-click:
-* "left-blink", ...
+* "left-blink", "mouth"
 *
 * right-click:
-* "right-blink", ...
+* "right-blink", "mouth"
 */
 let jsonPreferences = {}; //Will hold all preferences as a json object
 
@@ -59,6 +59,13 @@ function updateNext() {
   key = keyVal[0];
   val = keyVal[1];
 
+  //Make sure not to illegally set click method (both click methods may not be mouth):
+  if ((key=="left-click" && val=="mouth" && jsonPreferences["right-click"]=="mouth") ||
+      (key=="right-click" && val=="mouth" && jsonPreferences["left-click"]=="mouth")) {
+    console.log("Could not save user preferences!");
+    updateNext();
+  }
+
   let origVal = jsonPreferences[key];
   jsonPreferences[key] = val;
   fs.writeFile('./app/preferences/preferences.json', JSON.stringify(jsonPreferences), (err) => {
@@ -68,9 +75,9 @@ function updateNext() {
       console.log(err);
       jsonPreferences[key] = origVal;
     }
-    if (key=="mode" && val!="drag")
+    if (key=="mode" && val!="drag") //Check only after mode has actually been switched
       mouse.toggleBtnUpDwn("up"); //Whenever mode switches away from drag mode, make sure mouse goes up.
-    updateNext()
+    updateNext();
   });
 }
 

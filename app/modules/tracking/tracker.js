@@ -1,6 +1,7 @@
 let draw = require("./draw");
 let mouse = require("../peripheral/mouse");
 let blink = require("./blink");
+let mouth = require("./mouth");
 let preferences = require("../../preferences/preferences");
 
 //Used in point tracking
@@ -10,7 +11,7 @@ let firstLoopNoFace = true; //Used in tracking after face is lost
 let lastXYs = [];           //For tracking face move offsets
 let prevWholeFace = [];     //Used to detect blinks/facial changes
 
-let userBlinked = false; //Used to change line color
+let userClicked = false; //Used to change line color
 
 //Camera/Library letiables
 let webcam;
@@ -66,25 +67,56 @@ function trackFaces() {
       }
       firstLoopNoFace = true;
 
-      //Click if user has blinked
-      if (prevWholeFace != []) {
-        blinkRet = blink.blinked(prevWholeFace, face.vertices);
-        userBlinked = blinkRet.waitingForTimeout;
-        if (blinkRet.left && blinkRet.right) {
-          //Maybe do something when both eyes blink?
-        }
-        else if (blinkRet.left) {
-          //If in drag mode, left blink will toggle mouse down/up.
-          // else, left blink will left click mouse.
-          if (preferences.getMode() == "drag")
-            mouse.toggleBtnUpDwn();
-          else
-            mouse.mouseLeftClick();
-        }
-        else if (blinkRet.right) {
-          mouse.mouseRightClick();
+      //Check for clicks!
+      if (preferences.getLeftClick() == "mouth" || preferences.getRightClick() == "mouth") {
+        mouthRet = mouth.mouthOpened(face.vertices);
+        userClicked = mouthRet.waitingForTimeout;
+        if (mouthRet.mouth) {
+          if (preferences.getLeftClick() == "mouth") {
+            //Left click
+            //If in drag mode, mouth will toggle mouse down/up.
+            // else, mouth will left click mouse.
+            if (preferences.getMode() == "drag")
+              mouse.toggleBtnUpDwn();
+            else
+              mouse.mouseLeftClick();
+          }
+          else {
+            //Right click
+            mouse.mouseRightClick();
+          }
         }
       }
+      if ((preferences.getLeftClick()+preferences.getRightClick()).includes("blink")) {
+        //Click if user has blinked
+        if (prevWholeFace != []) {
+          blinkRet = blink.blinked(prevWholeFace, face.vertices,
+            preferences.getLeftClick().includes("blink"),
+            preferences.getRightClick().includes("blink"));
+          if (blinkRet.left && blinkRet.right) {
+            //Maybe do something when both eyes blink? (Probably not)
+          }
+          else {
+            if (preferences.getLeftClick() == "left-blink") {
+              userClicked = blinkRet.waitingForTimeout || userClicked;
+              if (blinkRet.left) {
+                //If in drag mode, left blink will toggle mouse down/up.
+                // else, left blink will left click mouse.
+                if (preferences.getMode() == "drag")
+                  mouse.toggleBtnUpDwn();
+                else
+                  mouse.mouseLeftClick();
+              }
+            }
+            else { //if (preferences.getRightClick() == "right-blink")
+              userClicked = blinkRet.waitingForTimeout || userClicked;
+              if (blinkRet.right) 
+                mouse.mouseRightClick();
+            }
+          }
+        }
+      }
+
       prevWholeFace = face.vertices.slice(); //Copys by value instead of by reference
 
       //Move the mouse!
@@ -95,7 +127,7 @@ function trackFaces() {
 
       //Set stroke color based on whether or not user was blinking
       // yellow = blink, blue = normal (no blink)
-      imageDataCtx.strokeStyle = userBlinked ? "#e6e600" /*yellow*/: "#00a0ff"; /*blue*/
+      imageDataCtx.strokeStyle = userClicked ? "#e6e600" /*yellow*/: "#00a0ff"; /*blue*/
 
       //Draw dots
       for (let k = 0; k < face.vertices.length; k += 2) {
