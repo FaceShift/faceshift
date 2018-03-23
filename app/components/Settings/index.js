@@ -1,7 +1,7 @@
 import React from "react";
 
 import DropDown from "../DropDown/index";
-import Gestures from "../../config/constants/Gestures";
+import Gestures from "../../utils/constants/Gestures";
 
 class Settings extends React.Component {
 

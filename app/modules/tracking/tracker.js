@@ -1,5 +1,5 @@
 let draw = require("./draw");
-let mouse = require("../peripheral/mouse");
+let mouse = require("../mouse/mouse");
 let blink = require("./blink");
 
 //Used in point tracking
