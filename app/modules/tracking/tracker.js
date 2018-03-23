@@ -67,6 +67,7 @@ function trackFaces() {
       }
       firstLoopNoFace = true;
 
+      userClicked = false;
       //Check for clicks!
       if (preferences.getLeftClick() == "mouth" || preferences.getRightClick() == "mouth") {
         mouthRet = mouth.mouthOpened(face.vertices);
@@ -108,7 +109,7 @@ function trackFaces() {
                   mouse.mouseLeftClick();
               }
             }
-            else { //if (preferences.getRightClick() == "right-blink")
+            if (preferences.getRightClick() == "right-blink") {
               userClicked = blinkRet.waitingForTimeout || userClicked;
               if (blinkRet.right) 
                 mouse.mouseRightClick();
