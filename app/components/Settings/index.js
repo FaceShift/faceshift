@@ -1,13 +1,15 @@
 import React from "react";
 
 import DropDown from "../DropDown/index";
-import Gestures from "../../utils/constants/Gestures";
+import {Gestures} from "../../utils/constants/constants";
 import BasicSlider from "../Slider";
+import FlatButton from "material-ui/FlatButton";
 
 class Settings extends React.Component {
 
   state = {
     isDisabled: true,
+    sensitivityValue: 0.5,
   };
 
   gesturesToArray = () => {
@@ -21,8 +23,13 @@ class Settings extends React.Component {
   };
 
   onSensitivityChanged = (newValue) => {
-    console.log("New value is ", newValue)
+    this.setState({ sensitivityValue: newValue})
   };
+
+  renderSettingsButton = () => (
+    <FlatButton onClick={() => this.setState({isDisabled: !this.state.isDisabled})}
+                label={this.state.isDisabled ? "Edit" : "Save"}/>
+  );
 
   renderRightMouseClickDropDown = () => (<DropDown value={0} label="Right Mouse Click"
                                                    options={this.gesturesToArray()}
@@ -37,12 +44,14 @@ class Settings extends React.Component {
                                                disabled={this.state.isDisabled}/>);
 
   renderSensitivitySlider = () => <BasicSlider
+    currentValue={this.state.sensitivityValue}
     disabled={this.state.isDisabled}
     onChange={this.onSensitivityChanged}/>;
 
   render() {
     return (
       <div>
+        {this.renderSettingsButton()}
         {this.renderRightMouseClickDropDown()}
         {this.renderLeftMouseClickDropDown()}
         {this.renderDoubleClickDropDown()}

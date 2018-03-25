@@ -17,7 +17,6 @@ class EnableButtons extends React.Component{
   };
 
   onCameraButtonClicked = () => {
-    (this.state.isWebcamOn) ? webcam.stopCamera() : webcam.startCamera();
     this.setState({ isWebcamOn: !this.state.isWebcamOn});
   };
 
