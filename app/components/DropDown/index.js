@@ -1,14 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
-import DropDownMenu from "material-ui/DropDownMenu";
 import MenuItem from "material-ui/MenuItem";
+import SelectField from "material-ui/SelectField";
 
 class DropDown extends React.Component {
 
   state = {
     value: 0,
   };
-
 
   static propTypes = {
     options: PropTypes.array,
@@ -23,23 +22,29 @@ class DropDown extends React.Component {
     disabled: false,
   };
 
+  handleChange = (event, index, value) => {
+    this.setState({value: value})
+  };
+
   renderOptions = () => (
     this.props.options.map(
-      (option, index) => (
-        <div>
-          <MenuItem key={index} value={index} primaryText={option}/>
-        </div>
-      )
+      (option, index) => {
+        return <MenuItem key={index} value={index} primaryText={option}/>
+      }
     )
   );
 
   render() {
     return (
       <div>
-        {this.props.label === "" ? <div/> : this.props.label}
-        <DropDownMenu value={this.props.value} disabled={this.props.disabled}>
+        <SelectField
+          floatingLabelText={this.props.label}
+          value={this.state.value}
+          onChange={this.handleChange}
+          disabled={this.props.disabled}
+        >
           {this.renderOptions()}
-        </DropDownMenu>
+        </SelectField>
       </div>
     )
   }
