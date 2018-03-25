@@ -14,11 +14,13 @@ class DropDown extends React.Component {
     options: PropTypes.array,
     label: PropTypes.string,
     value: PropTypes.number,
+    disabled: PropTypes.bool,
   };
   static defaultProps = {
     options: [],
     label: "",
     value: 0,
+    disabled: false,
   };
 
   renderOptions = () => (
@@ -35,7 +37,7 @@ class DropDown extends React.Component {
     return (
       <div>
         {this.props.label === "" ? <div/> : this.props.label}
-        <DropDownMenu value={this.props.value}>
+        <DropDownMenu value={this.props.value} disabled={this.props.disabled}>
           {this.renderOptions()}
         </DropDownMenu>
       </div>

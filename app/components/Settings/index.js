@@ -2,8 +2,13 @@ import React from "react";
 
 import DropDown from "../DropDown/index";
 import Gestures from "../../utils/constants/Gestures";
+import BasicSlider from "../Slider";
 
 class Settings extends React.Component {
+
+  state = {
+    isDisabled: true,
+  };
 
   gesturesToArray = () => {
     const gestureArray = [];
@@ -15,11 +20,25 @@ class Settings extends React.Component {
     return gestureArray;
   };
 
-  renderRightMouseClickDropDown = () => <DropDown value={0} label="Right Mouse Click" options={this.gesturesToArray()}/>;
+  onSensitivityChanged = (newValue) => {
+    console.log("New value is ", newValue)
+  };
 
-  renderLeftMouseClickDropDown = () => <DropDown value={1} label="Left Mouse Click" options={this.gesturesToArray()}/>;
+  renderRightMouseClickDropDown = () => (<DropDown value={0} label="Right Mouse Click"
+                                                   options={this.gesturesToArray()}
+                                                   disabled={this.state.isDisabled}/>);
 
-  renderDoubleClickDropDown = () => <DropDown value={2} label="Double Click" options={this.gesturesToArray()}/>;
+  renderLeftMouseClickDropDown = () => (<DropDown value={1} label="Left Mouse Click"
+                                                  options={this.gesturesToArray()}
+                                                  disabled={this.state.isDisabled}/>);
+
+  renderDoubleClickDropDown = () => (<DropDown value={2} label="Double Click"
+                                               options={this.gesturesToArray()}
+                                               disabled={this.state.isDisabled}/>);
+
+  renderSensitivitySlider = () => <BasicSlider
+    disabled={this.state.isDisabled}
+    onChange={this.onSensitivityChanged}/>;
 
   render() {
     return (
@@ -27,6 +46,7 @@ class Settings extends React.Component {
         {this.renderRightMouseClickDropDown()}
         {this.renderLeftMouseClickDropDown()}
         {this.renderDoubleClickDropDown()}
+        {this.renderSensitivitySlider()}
       </div>
     )
   }
