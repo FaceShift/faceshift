@@ -6,7 +6,7 @@ class Home extends React.Component {
 
   renderSettings = () => <Settings/>;
 
-  renderMainButtons = () => <EnableButtons/>
+  renderMainButtons = () => <EnableButtons/>;
 
   render() {
     return (
