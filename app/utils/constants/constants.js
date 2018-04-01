@@ -4,7 +4,17 @@ export const Gestures = Object.freeze({
   BLINK: "Blink",
 });
 
-export const Modes = Object.freeze({
-  MOUSE_MODE: "Mouse Mode",
-  SCROLL_MODE: "Scroll Mode",
-});
+export const Modes = Object.freeze([
+  {
+    type: "MOUSE_MODE",
+    value: "Mouse Mode",
+  },
+  {
+    type: "SCROLL_MODE",
+    value: "Scroll Mode",
+  },
+  {
+    type: "DRAG_HOLD_MODE",
+    value: "Drag and Hold",
+  },
+]);

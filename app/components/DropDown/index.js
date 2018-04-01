@@ -9,6 +9,12 @@ class DropDown extends React.Component {
     value: 0,
   };
 
+  componentWillMount(){
+    this.setState({
+      value: this.props.value,
+    })
+  };
+
   static propTypes = {
     options: PropTypes.array,
     label: PropTypes.string,
