@@ -14,7 +14,7 @@ let isWindowSmall = false;
 
 function createWindow() {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 1000, height: 1000});
+  mainWindow = new BrowserWindow({width: 335, height: 1000});
 
   // and load the index.html of the app.
   mainWindow.loadURL(url.format({
@@ -24,7 +24,7 @@ function createWindow() {
   }));
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 
   mainWindow.setAlwaysOnTop(true, "floating");
   mainWindow.setVisibleOnAllWorkspaces(true);
@@ -63,12 +63,12 @@ app.on("activate", function () {
 
 const expandWindow = function () {
   isWindowSmall = false;
-  mainWindow.setSize(1000, 1000);
+  mainWindow.setSize(335, 700);
 };
 
 const shrinkWindow = function () {
   isWindowSmall = true;
-  mainWindow.setSize(500, 500);
+  mainWindow.setSize(335, 350);
 };
 
 ipcMain.on("resize", function (e) {

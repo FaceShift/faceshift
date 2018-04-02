@@ -8,6 +8,7 @@ import WebcamOffIcon from "material-ui/svg-icons/av/videocam-off"
 import RadioButtons from "../RadioButtons";
 
 import { Modes } from "../../utils/constants/constants";
+import "./styles.css";
 
 import webcam from "../../modules/webcam/webcam";
 
@@ -47,10 +48,20 @@ class EnableButtons extends React.Component{
 
   render(){
     return(
-      <div>
-        {this.renderMicrophoneButton()}
-        {this.renderCameraButton()}
-        {this.renderMouseModeButton()}
+      <div className="container">
+        <div className="toggleButton">
+          <div>
+            {this.renderMicrophoneButton()}
+          </div>
+          <div>
+            {this.renderCameraButton()}
+          </div>
+        </div>
+        <div>
+          <div style={{ width: 200}}>
+            {this.renderMouseModeButton()}
+          </div>
+        </div>
       </div>
     )
   }
