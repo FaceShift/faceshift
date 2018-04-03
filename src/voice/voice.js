@@ -1,50 +1,63 @@
-const record = require('node-record-lpcm16');
-const speech = require('@google-cloud/speech');
+var record = require('node-record-lpcm16')
+var request = require('request')
+var fs = require('fs')
+
+var training = require('./training')
+
+const PAUSE_COMMAND_KEY = 'pause'
+const RESUME_COMMAND_KEY ='resume'
+const SCROLL_MODE_COMMAND_KEY = 'scroll-mode'
+const MOUSE_MODE_COMMAND_KEY = 'mouse-mode'
+
+const COMMANDS = new Map([
+  [PAUSE_COMMAND_KEY, 'face shift pause'],
+  [RESUME_COMMAND_KEY, 'face shift resume'],
+  [SCROLL_MODE_COMMAND_KEY, 'face shift scroll mode'],
+  [MOUSE_MODE_COMMAND_KEY, 'face shift mouse mode'],
+])
+
+async function start() {
+  var untrained = training.indentifyUntrainedCommands(COMMANDS)
+  var voiceSamples = await training.recordCommands(untrained, COMMANDS)
+  voiceSamples.forEach((voiceSample, commandName) => {
+    training.requestVoiceModels(commandName, COMMANDS.get(commandName), voiceSample, () => {
+      console.log("Success!")
+    })
+  })
+}
+
+function trainVoiceModelFromFiles(commandName, commandPhrase, waveFilePaths) {
+  var voiceSamples = []
+  waveFilePaths.forEach(filePath => {
+    if (fs.existsSync(filePath)) {
+      var waveData = fs.readFileSync(filePath).toString('base64')
+      voiceSamples.push({
+        "wave": waveData
+      })
+    } else {
+      console.error("File '" + filePath + "' does not exist!")
+    }
+  });
+
+  training.requestVoiceModels(commandName, commandPhrase, voiceSamples, () => {
+    console.log("Success!")
+  })
+}
+
+
+
+function test() {
+  var testPaths = [
+    '/Users/mathewsj2/wentworth/software-engineering/faceshift/resources/training/1.wav',
+    '/Users/mathewsj2/wentworth/software-engineering/faceshift/resources/training/2.wav',
+    '/Users/mathewsj2/wentworth/software-engineering/faceshift/resources/training/3.wav'
+  ]
+  trainVoiceModelFromFiles("pause", "face shift pause", testPaths)
+}
+
+start()
 
 module.exports = {
-  processResults: function (results) {
-    console.log('Transcription: ${result}\n');
-  },
-  start: function () {
-    // The audio file's encoding, sample rate in hertz, and BCP-47 language code
-    const request = {
-      config: {
-        auth: process.env.VOICE_API_KEY,
-        encoding: 'LINEAR16',
-        sampleRateHertz: 16000,
-        languageCode: 'en-US',
-      },
-      interimResults: false, // If you want interim results, set this to true
-    };
-
-    // Creates a client
-    const client = new speech.SpeechClient();
-
-    // Create a recognize stream
-    const recognizeStream = client
-      .streamingRecognize(request)
-      .on('error', console.error)
-      .on('data', data => {
-        const hasResults = data.results[0] && data.results[0].alternatives[0];
-        if (hasResults) {
-          const result = data.results[0].alternatives[0];
-          processResults(result);
-        } else {
-          console.log('\nTime limit reached\n');
-        }
-      });
-
-    // Start recording and send the microphone input to the Speech API
-    record.start({
-        sampleRateHertz: request.config.sampleRateHertz,
-        threshold: 0,
-        verbose: false,
-        recordProgram: 'rec', // Try also "arecord" or "sox"
-        silence: '10.0',
-      })
-      .on('error', console.error)
-      .pipe(recognizeStream);
-
-    console.log('Listening, press Ctrl+C to stop.');
-  }
-}
+  test,
+  start
+};

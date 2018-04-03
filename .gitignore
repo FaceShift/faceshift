@@ -65,3 +65,7 @@ typings/
 
 # Test Resources
 resources/
+
+#Snowboy
+*.pmdl
+*.wav
