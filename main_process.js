@@ -15,10 +15,11 @@ let windowPosition = [20, 20];
 
 function createWindow() {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 335, height: 1000});
+  mainWindow = new BrowserWindow({width: 335, height: 700});
   mainWindow.setMenu(null);
 
-  mainWindow.setPosition(windowPosition[0], windowPosition[1]);
+  resetPos(); // Move window into position
+
   // and load the index.html of the app.
   mainWindow.loadURL(url.format({
     pathname: path.join(__dirname, "/public/index.html"),
@@ -67,14 +68,21 @@ app.on("activate", function () {
 const expandWindow = function () {
   isWindowSmall = false;
   mainWindow.setSize(335, 700);
+  resetPos();
 };
 
 const shrinkWindow = function () {
   isWindowSmall = true;
   mainWindow.setSize(335, 350);
-  mainWindow.setPosition(0, 0)
+  resetPos();
 };
 
 ipcMain.on("resize", function (e) {
   isWindowSmall ? expandWindow() : shrinkWindow()
 });
+
+const resetPos = function () {
+  screenSize = electron.screen.getPrimaryDisplay().workAreaSize;
+  windowSize = mainWindow.getSize();
+  mainWindow.setPosition(screenSize.width - windowSize[0], screenSize.height - windowSize[1]);
+}
