@@ -1,0 +1,6 @@
+{
+  "mode": "mouse",
+  "left-click": "left-blink",
+  "right-click": "right-blink",
+  "sensitivity": "0.5"
+}

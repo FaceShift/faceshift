@@ -1,10 +1,10 @@
 let tracker = require("./tracker");
 
-var webcam = document.getElementById("_webcam"); // our webcam video
-var imageData = document.getElementById("_imageData"); // image data for BRFv4
-var brfManager = null;
-var resolution = null;
-var brfv4 = null;
+const webcam = document.getElementById("_webcam"); // our webcam video
+const imageData = document.getElementById("_imageData"); // image data for BRFv4
+let brfManager = null;
+let resolution = null;
+let brfv4 = null;
 
 function startTracker() {
   waitForSDK();
@@ -14,7 +14,7 @@ function waitForSDK() {
   if (brfv4 === null) {
     brfv4 = {
       locateFile: function () {
-        return "lib/BRFv4/libs/brf_asmjs/BRFv4_JS_trial.js.mem"
+        return "../lib/BRFv4/libs/brf_asmjs/BRFv4_JS_trial.js.mem"
       }
     };
     initializeBRF(brfv4);
@@ -38,10 +38,9 @@ function initSDK() {
   brfManager.setMode(brfv4.BRFMode.FACE_TRACKING);
   brfManager.setOpticalFlowParams(21, 4, 50, 0.00005);
   brfManager.setOpticalFlowCheckPointsValidBeforeTracking(true);
-  /*imageData.addEventListener("click", tracker.onClicked);*/
   imageData.mouseEnabled = true;
 
   tracker.startTrackFaces(webcam, imageData, brfManager, resolution, brfv4);
 }
 
-module.exports = { startTracker };
+module.exports = {startTracker};

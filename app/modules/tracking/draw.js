@@ -5,7 +5,7 @@ function drawPoint(imageDataContext, x, y, r) {
 }
 
 function drawTriangle(imageDataContext, pts) {
-  if (pts.length != 3)
+  if (pts.length !== 3)
     return;
 
   imageDataContext.beginPath();
