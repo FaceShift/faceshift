@@ -1,5 +1,9 @@
 let waitingForTimeout = false;
 let timeOut = -1;
+let timer = (new Date()).getTime();
+let prevWasOpen = false;
+
+const timeToClick = 1000; //hold mouth open for 1s to click
 
 function mouthOpened(v) {
   //Values to be returned
@@ -14,7 +18,6 @@ function mouthOpened(v) {
     };
   }
 
-  /////////////////////////////////////////////////////////////////////////////
   //Mouth-Open Detection - Or: How wide open is the mouth?
   let p0x, p0y, p1x, p1y;
 
@@ -25,7 +28,12 @@ function mouthOpened(v) {
   p1x = v[42*2];
   p1y = v[42*2 + 1];
 
-  let eyeDist = Math.sqrt((p0x - p1x)*(p0x - p1x) + (p0y - p1y)*(p0y - p1y));
+  //For calculating euclidean distance
+  let euclDist = (pt1x, pt1y, pt2x, pt2y) => {
+    return Math.sqrt(Math.pow(pt2x-pt1x, 2) + Math.pow(pt2y-pt1y, 2));
+  }
+
+  let eyeDist = euclDist(p1x, p1y, p0x, p0y);
 
   //Mouth upper lip lower section, middle
   p0x = v[62*2];
@@ -34,37 +42,47 @@ function mouthOpened(v) {
   p1x = v[66*2];
   p1y = v[66*2 + 1];
 
-  let mouthDist = Math.sqrt((p0x - p1x)*(p0x - p1x) + (p0y - p1y)*(p0y - p1y));
-  let yawnFactor = mouthDist / eyeDist;
+  let mouthDist = euclDist(p1x, p1y, p0x, p0y);
+  mouthDist *= 10; //Mouth dist is ~1/10 eye dist. Even them out
 
-  yawnFactor -= 0.35; // remove smiling
+  let openFactor = mouthDist / eyeDist;
 
-  yawnFactor *= 2.0; // scale up a bit
+  if (openFactor < 0.0) { openFactor = 0.0; }
 
-  if (yawnFactor < 0.0) { yawnFactor = 0.0; }
-  if (yawnFactor > 1.0) { yawnFactor = 1.0; }
-
-  //Let the color show you how much you yawn.
-
-  /*let color =
-    (((0xff * (1.0 - yawnFactor) & 0xff) << 16)) +
-    (((0xff * yawnFactor) & 0xff) << 8);  */
-
-  console.log(yawnFactor);
-
-  /////////////////////////////////////////////////////////////////////////////
-  ///mouthOpenOccurred();
-
+  //FOR TESTING  
+  /*console.log("eye: " + eyeDist + "\n" + 
+              "mouth: " + mouthDist + "\n" + 
+              "m/e: " + mouthDist / eyeDist + "\n" + 
+              "yawn: " + openFactor);*/
+  let limit = 3.5;
+  //Click if mouth open for >2s
+  if (openFactor > limit) {
+    if (prevWasOpen) {
+      if ((new Date()).getTime() - timer > timeToClick) {
+        mouthOpenOccurred = true;
+        handleMouthOpen();
+        prevWasOpen = false;
+      }
+    }
+    else {
+      timer = (new Date()).getTime();
+      prevWasOpen = true;
+    }
+  } 
+  else {
+    prevWasOpen = false;
+  }           
+  
   return {
     mouth: mouthOpenOccurred,
-    percentOpen: yawnFactor,
+    percentOpen: openFactor,
     waitingForTimeout: waitingForTimeout
   };
 }
 
 //When a mouth open occurs, set a timeout so a mouth open
 // can not trigger an event for 200ms
-function mouthOpenOccurred() {
+function handleMouthOpen() {
   waitingForTimeout = true;
 
   if(timeOut > -1) { //Shouldnt ever happen
