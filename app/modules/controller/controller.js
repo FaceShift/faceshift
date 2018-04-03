@@ -199,15 +199,16 @@ function moveMouse(xy1/*Prev*/, xy2/*New*/, resolution, imageDataCtx) {
 
     let pt = xy2[0]; //Want to isolate the  middle nose point for certain calculations
     let midHoriz = resolution.height/2;
-    let midSect = 1/3;
+    let midSectH = 1/3;
+    let midSectW = .29;
     let midVert = resolution.width/2;
     
     //Perform action based on current mode:
     if (preferences.getMode() == "mouse" || preferences.getMode() == "drag") {
-      let midSectTop = midHoriz - (midSect*resolution.height*0.5);
-      let midSectBtm = midHoriz + (midSect*resolution.height*0.5);
-      let midSectLeft = midVert - (midSect*resolution.width*0.5);
-      let midSectRight = midVert + (midSect*resolution.width*0.5);
+      let midSectTop = midHoriz - (midSectH*resolution.height*0.5);
+      let midSectBtm = midHoriz + (midSectH*resolution.height*0.5);
+      let midSectLeft = midVert - (midSectW*resolution.width*0.5);
+      let midSectRight = midVert + (midSectW*resolution.width*0.5);
 
       //Draw direct control box
       imageDataCtx.strokeStyle = "#ff9900";
