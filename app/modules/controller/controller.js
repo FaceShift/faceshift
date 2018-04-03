@@ -101,7 +101,7 @@ function processFaces(brfManager, resolution, brfv4, imageDataCtx) {
       prevWholeFace = face.vertices.slice(); //Copys by value instead of by reference
 
       //Move the mouse!
-      moveMouse(lastXYs, newXYs, resolution);
+      moveMouse(lastXYs, newXYs, resolution, imageDataCtx);
 
       //Set last face coords to current face coords
       lastXYs = newXYs;
@@ -162,16 +162,18 @@ function processFaces(brfManager, resolution, brfv4, imageDataCtx) {
         let pt = opticalPoints[i];
         lostFacePoints.push([pt.x, pt.y]);
       }
-      moveMouse(lastXYs, lostFacePoints, resolution)
+      moveMouse(lastXYs, lostFacePoints, resolution, imageDataCtx)
       lastXYs = lostFacePoints;
     }
 
     //Rectangles
+    imageDataCtx.strokeStyle = "#00a0ff"; //blue
     let rectangles = brfManager.getAllDetectedFaces();
     for (let i = 0; i < rectangles.length; i++) {
       rect = rectangles[i];
       draw.drawSquare(imageDataCtx, rect);
     }
+    imageDataCtx.strokeStyle = "#00ff00"; //green
     rectangles = brfManager.getMergedDetectedFaces();
     for (let i = 0; i < rectangles.length; i++) {
       rect = rectangles[i];
@@ -180,8 +182,8 @@ function processFaces(brfManager, resolution, brfv4, imageDataCtx) {
   }
 }
 
-function moveMouse(xy1/*Prev*/, xy2/*New*/, resolution) {
-  if (xy1.length > 0) {
+function moveMouse(xy1/*Prev*/, xy2/*New*/, resolution, imageDataCtx) {
+  if (xy1.length > 0 && xy2.length > 0) {
     let xTotal = 0;
     let yTotal = 0;
     for (let j = 0; j < xy2.length; j++) {
@@ -191,26 +193,49 @@ function moveMouse(xy1/*Prev*/, xy2/*New*/, resolution) {
     xTotal /= xy2.length;
     yTotal /= xy2.length;
 
-    let factor = 10;
+    //****************************************************
+    //TODO: Replace this with preferences.getSensitivity()
+    let factor = 10; //If sensitivity goes from 0 to 20
+
+    let pt = xy2[0]; //Want to isolate the  middle nose point for certain calculations
+    let midHoriz = resolution.height/2;
+    let midSect = 1/3;
+    let midVert = resolution.width/2;
     
     //Perform action based on current mode:
-    if (preferences.getMode() == "mouse") {
-      mouse.moveLeftRight(xTotal*factor);
-      mouse.moveUpDown(yTotal*factor);
-    }
-    else if (preferences.getMode() == "drag") {
-      mouse.dragLeftRight(xTotal*factor);
-      mouse.dragUpDown(yTotal*factor);
+    if (preferences.getMode() == "mouse" || preferences.getMode() == "drag") {
+      let midSectTop = midHoriz - (midSect*resolution.height*0.5);
+      let midSectBtm = midHoriz + (midSect*resolution.height*0.5);
+      let midSectLeft = midVert - (midSect*resolution.width*0.5);
+      let midSectRight = midVert + (midSect*resolution.width*0.5);
+
+      //Draw direct control box
+      imageDataCtx.strokeStyle = "#ff9900";
+      draw.drawSquare(imageDataCtx, { x:midSectLeft,
+                                      y:midSectTop,
+                                      width:(midSectRight-midSectLeft),
+                                      height:(midSectBtm-midSectTop) });
+
+      if ((pt[0] > midSectLeft && pt[0] < midSectRight) && (pt[1] > midSectTop && pt[1] < midSectBtm)) {
+        //Direct movement!
+        mouse.moveLeftRight(xTotal*factor);
+        mouse.moveUpDown(yTotal*factor);
+      }
+      else {
+        xTotal = pt[0] - midVert;
+        yTotal = pt[1] - midHoriz;
+        factor *= 15;
+        let percent = xTotal/resolution.width;
+        preferences.getMode() == "mouse" ? mouse.moveLeftRight(percent*factor) : mouse.dragLeftRight(percent*factor);
+        percent = yTotal/resolution.height;
+        preferences.getMode() == "mouse" ? mouse.moveUpDown(percent*factor) : mouse.dragUpDown(percent*factor);
+      }    
     }
     else if (preferences.getMode() == "scroll") {
-      if (xy2.length < 1)
-        return;
-      factor = 225;
-      pt = xy2[0]; //Only care about middle nose point
-      mid = resolution.height/2;
+      factor *= 22.5;
       midSect = 1/8;
-      midSectTop = mid - (midSect*resolution.height*0.5);
-      midSectBtm = mid + (midSect*resolution.height*0.5);
+      midSectTop = midHoriz - (midSect*resolution.height*0.5);
+      midSectBtm = midHoriz + (midSect*resolution.height*0.5);
 
       //Scroll up or down at a rate that is based on how far away from 
       // the middle of the screen the users nose is.
