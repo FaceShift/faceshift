@@ -42,16 +42,7 @@ function mouthOpened(v) {
 
   let openFactor = mouthDist / eyeDist;
 
-  //openFactor -= 0.35; // remove smiling
-  //openFactor *= 2.0; // scale up a bit
-
   if (openFactor < 0.0) { openFactor = 0.0; }
-  //if (openFactor > 1.0) { openFactor = 1.0; }
-
-  //Let the color show you how much you yawn.
-  /*let color =
-    (((0xff * (1.0 - openFactor) & 0xff) << 16)) +
-    (((0xff * openFactor) & 0xff) << 8);  */
 
   //FOR TESTING  
   /*console.log("eye: " + eyeDist + "\n" + 
