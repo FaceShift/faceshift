@@ -6,6 +6,8 @@ import BasicSlider from "../Slider";
 import FlatButton from "material-ui/FlatButton";
 import Divider from 'material-ui/Divider';
 
+import preferencesJSON from "../../utils/preferences/preferences.json";
+
 class Settings extends React.Component {
 
   state = {

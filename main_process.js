@@ -11,11 +11,14 @@ const url = require("url");
 let mainWindow;
 
 let isWindowSmall = false;
+let windowPosition = [20, 20];
 
 function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({width: 335, height: 1000});
+  mainWindow.setMenu(null);
 
+  mainWindow.setPosition(windowPosition[0], windowPosition[1]);
   // and load the index.html of the app.
   mainWindow.loadURL(url.format({
     pathname: path.join(__dirname, "/public/index.html"),
@@ -69,6 +72,7 @@ const expandWindow = function () {
 const shrinkWindow = function () {
   isWindowSmall = true;
   mainWindow.setSize(335, 350);
+  mainWindow.setPosition(0, 0)
 };
 
 ipcMain.on("resize", function (e) {
