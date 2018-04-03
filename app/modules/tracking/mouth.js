@@ -28,7 +28,12 @@ function mouthOpened(v) {
   p1x = v[42*2];
   p1y = v[42*2 + 1];
 
-  let eyeDist = Math.sqrt((p0x - p1x)*(p0x - p1x) + (p0y - p1y)*(p0y - p1y));
+  //For calculating euclidean distance
+  let euclDist = (pt1x, pt1y, pt2x, pt2y) => {
+    return Math.sqrt(Math.pow(pt2x-pt1x, 2) + Math.pow(pt2y-pt1y, 2));
+  }
+
+  let eyeDist = euclDist(p1x, p1y, p0x, p0y);
 
   //Mouth upper lip lower section, middle
   p0x = v[62*2];
@@ -37,21 +42,12 @@ function mouthOpened(v) {
   p1x = v[66*2];
   p1y = v[66*2 + 1];
 
-  let mouthDist = Math.sqrt((p0x - p1x)*(p0x - p1x) + (p0y - p1y)*(p0y - p1y));
+  let mouthDist = euclDist(p1x, p1y, p0x, p0y);
   mouthDist *= 10; //Mouth dist is ~1/10 eye dist. Even them out
 
   let openFactor = mouthDist / eyeDist;
 
-  //openFactor -= 0.35; // remove smiling
-  //openFactor *= 2.0; // scale up a bit
-
   if (openFactor < 0.0) { openFactor = 0.0; }
-  //if (openFactor > 1.0) { openFactor = 1.0; }
-
-  //Let the color show you how much you yawn.
-  /*let color =
-    (((0xff * (1.0 - openFactor) & 0xff) << 16)) +
-    (((0xff * openFactor) & 0xff) << 8);  */
 
   //FOR TESTING  
   /*console.log("eye: " + eyeDist + "\n" + 

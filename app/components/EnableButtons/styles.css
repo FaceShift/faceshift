@@ -1,0 +1,7 @@
+.container {
+    display: flex;
+}
+
+.toggleButton {
+    flex-direction: column;
+}

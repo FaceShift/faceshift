@@ -1,4 +1,5 @@
 const electron = require("electron");
+const ipcMain = electron.ipcMain;
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 
@@ -9,10 +10,15 @@ const url = require("url");
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 
+let isWindowSmall = false;
+let windowPosition = [20, 20];
+
 function createWindow() {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 800, height: 600});
+  mainWindow = new BrowserWindow({width: 335, height: 1000});
+  mainWindow.setMenu(null);
 
+  mainWindow.setPosition(windowPosition[0], windowPosition[1]);
   // and load the index.html of the app.
   mainWindow.loadURL(url.format({
     pathname: path.join(__dirname, "/public/index.html"),
@@ -21,7 +27,11 @@ function createWindow() {
   }));
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
+
+  mainWindow.setAlwaysOnTop(true, "floating");
+  mainWindow.setVisibleOnAllWorkspaces(true);
+  mainWindow.setFullScreenable(false);
 
   // Emitted when the window is closed.
   mainWindow.on("closed", function () {
@@ -52,4 +62,19 @@ app.on("activate", function () {
   if (mainWindow === null) {
     createWindow();
   }
+});
+
+const expandWindow = function () {
+  isWindowSmall = false;
+  mainWindow.setSize(335, 700);
+};
+
+const shrinkWindow = function () {
+  isWindowSmall = true;
+  mainWindow.setSize(335, 350);
+  mainWindow.setPosition(0, 0)
+};
+
+ipcMain.on("resize", function (e) {
+  isWindowSmall ? expandWindow() : shrinkWindow()
 });
