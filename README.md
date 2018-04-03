@@ -27,7 +27,7 @@ $ yarn watch
 3. Install SoX for voice commands [http://sox.sourceforge.net/](http://sox.sourceforge.net/)
 
 4. Get an Api key from Snowboy 
-API token can be obtained by logging into [https://snowboy.kitt.ai](https://snowboy.kitt.ai), click on “Profile settings”:
+API token can be obtained by logging into [https://snowboy.kitt.ai](https://snowboy.kitt.ai), click on 'Profile settings'
 
 5. Create an environtment variable
 ```
