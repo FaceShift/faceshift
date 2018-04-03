@@ -23,7 +23,17 @@ $ cd faceshift
 $ yarn
 $ yarn watch
 ```
-3. Run the project (open a different terminal/command window)
+
+3. Install SoX for voice commands [http://sox.sourceforge.net/](http://sox.sourceforge.net/)
+
+4. Get an Api key from Snowboy 
+API token can be obtained by logging into [https://snowboy.kitt.ai](https://snowboy.kitt.ai), click on “Profile settings”:
+Create an environtment variable
+```
+SNOWBOY_API = [your api key]
+```
+
+5. Run the project (open a different terminal/command window)
 
 ```
 Mac $ yarn start-mac
