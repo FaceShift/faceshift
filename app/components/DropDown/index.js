@@ -29,6 +29,7 @@ class DropDown extends React.Component {
   };
 
   handleChange = (event, index, value) => {
+    console.log("new value", value);
     this.setState({value: value})
   };
 

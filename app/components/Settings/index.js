@@ -1,9 +1,10 @@
 import React from "react";
 
 import DropDown from "../DropDown/index";
-import {Gestures} from "../../utils/constants/constants";
+import { Gestures } from "../../utils/constants/constants";
 import BasicSlider from "../Slider";
 import FlatButton from "material-ui/FlatButton";
+import Divider from 'material-ui/Divider';
 
 class Settings extends React.Component {
 
@@ -30,7 +31,10 @@ class Settings extends React.Component {
   };
 
   renderSettingsButton = () => (
-    <FlatButton label="Save"/>
+    <div>
+      Click to save your new changes
+      <FlatButton label="Save"/>
+    </div>
   );
 
   renderRightMouseClickDropDown = () => (<DropDown value={0} label="Right Mouse Click"
