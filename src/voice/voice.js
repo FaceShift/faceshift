@@ -3,6 +3,7 @@ var fs = require('fs')
 var training = require('./training')
 var snowboy = require('./snowboy')
 
+const FACESHIFT_COMMAND = 'faceshift'
 const PAUSE_COMMAND_KEY = 'pause'
 const RESUME_COMMAND_KEY ='resume'
 const SCROLL_COMMAND_KEY = 'scroll'
@@ -16,57 +17,33 @@ const COMMANDS = new Map([
 ])
 
 async function start() {
+  console.log('Starting Voice')
   var untrained = training.indentifyUntrainedCommands(COMMANDS)
   var voiceSamples = await training.recordCommands(untrained, COMMANDS)
   var modelCount = COMMANDS.size - untrained.length
   voiceSamples.forEach((voiceSample, commandName) => {
     training.requestVoiceModels(commandName, COMMANDS.get(commandName), voiceSample, () => {
-      modelCount++;
+      modelCount++
     })
   })
   var interval = setInterval(() => {
     if (modelCount == COMMANDS.size) {
       _detection()
-      clearInterval(interval)
     }
   }, 1000)
 }
 
+var started = false
 function _detection() {
-  snowboy.loadModels(training.voiceModelsPath)
-  snowboy.startDetecting(training.voiceModelsPath)
-}
-
-function trainVoiceModelFromFiles(commandName, commandPhrase, waveFilePaths) {
-  var voiceSamples = []
-  waveFilePaths.forEach(filePath => {
-    if (fs.existsSync(filePath)) {
-      var waveData = fs.readFileSync(filePath).toString('base64')
-      voiceSamples.push({
-        "wave": waveData
-      })
-    } else {
-      console.error("File '" + filePath + "' does not exist!")
-    }
-  });
-
-  training.requestVoiceModels(commandName, commandPhrase, voiceSamples, () => {
-    console.log("Success!")
-  })
-}
-
-function test() {
-  var testPaths = [
-    '/Users/mathewsj2/wentworth/software-engineering/faceshift/resources/training/1.wav',
-    '/Users/mathewsj2/wentworth/software-engineering/faceshift/resources/training/2.wav',
-    '/Users/mathewsj2/wentworth/software-engineering/faceshift/resources/training/3.wav'
-  ]
-  trainVoiceModelFromFiles("pause", "face shift pause", testPaths)
+  if (!started) {
+    started = true
+    snowboy.loadModels(training.voiceModelsPath)
+    snowboy.startDetecting(training.voiceModelsPath)
+  }
 }
 
 start()
 
 module.exports = {
-  test,
   start
 };
