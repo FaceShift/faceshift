@@ -2,7 +2,7 @@ var fs = require('fs')
 var record = require('node-record-lpcm16')
 var request = require('request')
 
-const voiceModelsPath = 'voice-models/'
+const voiceModelsPath = './voice-models/'
 const recordingsPath = voiceModelsPath + 'recordings/'
 
 const timeout = 3000
@@ -121,6 +121,7 @@ function requestVoiceModels(commandName, commandPhrase, voiceSamples, successCal
 }
 
 module.exports = {
+  voiceModelsPath,
   indentifyUntrainedCommands,
   recordCommands,
   requestVoiceModels
