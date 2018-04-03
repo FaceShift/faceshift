@@ -69,3 +69,5 @@ resources/
 #Snowboy
 *.pmdl
 *.wav
+
+.idea/
