@@ -219,9 +219,11 @@ const moveMouse = (xy1/*Prev*/, xy2/*New*/, resolution, imageDataCtx) => {
                                       height:(midSectBtm-midSectTop) });
 
       if ((pt[0] > midSectLeft && pt[0] < midSectRight) && (pt[1] > midSectTop && pt[1] < midSectBtm)) {
-        //Direct movement!
-        mouse.moveLeftRight(xTotal*factor);
-        mouse.moveUpDown(yTotal*factor);
+        //Direct movement! 
+        //mouse.moveLeftRight(xTotal*factor);
+        //mouse.moveUpDown(yTotal*factor);
+        preferences.getMode() == "mouse" ? mouse.moveLeftRight(xTotal*factor) : mouse.dragLeftRight(xTotal*factor);
+        preferences.getMode() == "mouse" ? mouse.moveUpDown(yTotal*factor) : mouse.dragUpDown(yTotal*factor);
       }
       else {
         xTotal = pt[0] - midVert;
@@ -234,10 +236,18 @@ const moveMouse = (xy1/*Prev*/, xy2/*New*/, resolution, imageDataCtx) => {
       }
     }
     else if (preferences.getMode() == "scroll") {
-      factor *= 22.5;
+      factor *= 12.5; //TODO: FIX
+      console.log(factor);
       const midSect = 1/8;
       midSectTop = midHoriz - (midSect*resolution.height*0.5);
       midSectBtm = midHoriz + (midSect*resolution.height*0.5);
+
+      //Draw scroll box
+      imageDataCtx.strokeStyle = "#ff9900";
+      draw.drawSquare(imageDataCtx, { x:0,
+                                      y:midSectTop,
+                                      width:resolution.width,
+                                      height:(resolution.height*midSect) });
 
       //Scroll up or down at a rate that is based on how far away from
       // the middle of the screen the users nose is.
