@@ -18,8 +18,8 @@ class Settings extends React.Component {
   };
 
   componentWillMount() {
-       // TIP: io() with no args does auto-discovery
-      socket.on('connect', function () { // TIP: you can avoid listening on `connect` and listen on events directly too!
+      socket.on('connect', function () {
+          console.log("React connected to socket")
           socket.emit('training', function (data) {
               console.log(data); // data will be 'woot'
           });

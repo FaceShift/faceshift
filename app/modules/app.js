@@ -4,20 +4,11 @@ let preferences = require("../app/preferences/preferences");
 let voice = require("../app/modules/voice/voice");
 let socket = require('../app/modules/socket');
 
-let _onMessage = (message) => {
-    console.log("_onMessage()", message)
-    switch (message) {
-        case "training":
-            console.log("Training!")
-            //voice.trainVoiceModel();
-            break;
-        default:
-            console.log("Uncaught message:", message);
-            break;
-    }
+let onTraining = () => {
+    voice.trainVoiceModel();
 };
 
-socket.createSocketServer(_onMessage);
+socket.createSocketServer(onTraining);
 
 
 preferences.loadPreferences();

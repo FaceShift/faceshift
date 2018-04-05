@@ -31,7 +31,7 @@ function startDetecting(voiceModelsDirectory) {
     });
 
     detector.on('sound', function (buffer) {
-        console.log('sound')
+
     });
 
     detector.on('error', function () {

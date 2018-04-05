@@ -14,10 +14,6 @@ const COMMANDS = {
     mouse: "face shift mouse"
 };
 
-const start = () => {
-    console.log("Starting Voice");
-};
-
 const stop = () => {
     snowboy.stopDetecting();
 };
@@ -52,7 +48,6 @@ let _detection = () => {
 };
 
 module.exports = {
-    start,
     stop,
     trainVoiceModel
 };
