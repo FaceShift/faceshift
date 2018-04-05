@@ -69,7 +69,8 @@ const processFaces = (brfManager, resolution, brfv4, imageDataCtx) => {
           }
         }
       }
-      if ((preferences.getLeftClick()+preferences.getRightClick()).includes("blink")) {
+
+      if ((`${preferences.getLeftClick()}${preferences.getRightClick()}`).includes("blink")) {
         //Click if user has blinked
         if (prevWholeFace != []) {
           let blinkRet = blink.blinked(prevWholeFace, face.vertices,
@@ -219,7 +220,7 @@ const moveMouse = (xy1/*Prev*/, xy2/*New*/, resolution, imageDataCtx) => {
                                       height:(midSectBtm-midSectTop) });
 
       if ((pt[0] > midSectLeft && pt[0] < midSectRight) && (pt[1] > midSectTop && pt[1] < midSectBtm)) {
-        //Direct movement! 
+        //Direct movement!
         //mouse.moveLeftRight(xTotal*factor);
         //mouse.moveUpDown(yTotal*factor);
         preferences.getMode() == "mouse" ? mouse.moveLeftRight(xTotal*factor) : mouse.dragLeftRight(xTotal*factor);

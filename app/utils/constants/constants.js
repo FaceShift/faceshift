@@ -7,16 +7,16 @@
 
 const Modes = Object.freeze([
   {
-    type: "MOUSE_MODE",
-    value: "Mouse Mode",
+    label: "Mouse Mode",
+    value: "mouse",
   },
   {
-    type: "SCROLL_MODE",
-    value: "Scroll Mode",
+    label: "Scroll Mode",
+    value: "scroll",
   },
   {
-    type: "DRAG_HOLD_MODE",
-    value: "Drag and Hold",
+    label: "Drag + Hold",
+    value: "drag",
   },
 ]);
 
