@@ -18,8 +18,6 @@ function loadModels(voiceModelsDirectory) {
     })
 }
 
-var silenceCount = 0;
-
 function startDetecting(voiceModelsDirectory) {
     console.log('Listening!')
     const detector = new Detector({
@@ -29,8 +27,7 @@ function startDetecting(voiceModelsDirectory) {
     });
 
     detector.on('silence', function () {
-        console.log('silence', silenceCount)
-        silenceCount++
+
     });
 
     detector.on('sound', function (buffer) {
@@ -53,12 +50,7 @@ function startDetecting(voiceModelsDirectory) {
     mic.pipe(detector);
 }
 
-function stopDetecting() {
-    console.log("TODO: Stop listening")
-}
-
 module.exports = {
     loadModels,
-    startDetecting,
-    stopDetecting
+    startDetecting
 }

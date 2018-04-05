@@ -30,11 +30,7 @@ const start = async () => {
             });
         }
     )
-    // voiceSamples.forEach((voiceSample, commandName) => {
-    //   training.requestVoiceModels(commandName, COMMANDS[commandName], voiceSample, () => {
-    //     modelCount++
-    //   });
-    // });
+
     let interval = setInterval(() => {
         console.log('Commands Size', Object.keys(COMMANDS).length)
         console.log('Model Count', modelCount)
