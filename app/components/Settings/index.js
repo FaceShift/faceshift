@@ -103,8 +103,6 @@ class Settings extends React.Component {
     </div>
   );
 
-  re
-
   renderDropDowns = () => (
     <div>
       <Card>
@@ -119,6 +117,16 @@ class Settings extends React.Component {
       </div>
   );
 
+  renderTrainVoiceModel = () => (
+    <div>
+      <Card>
+        <CardText>
+          Train voice model
+        </CardText>
+      </Card>
+    </div>
+  );
+
   renderNewSettings = () => (
     <div>
       <Tabs>
@@ -129,7 +137,7 @@ class Settings extends React.Component {
         </Tab>
 
         <Tab label="Voice Models">
-          <div> Voice Model</div>
+          {this.renderTrainVoiceModel()}
         </Tab>
       </Tabs>
     </div>
