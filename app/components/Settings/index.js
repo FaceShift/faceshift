@@ -1,4 +1,5 @@
 import React from "react";
+import ws from "ws";
 
 import DropDown from "../DropDown/index";
 import { Gestures } from "../../utils/constants/constants";
@@ -12,6 +13,9 @@ class Settings extends React.Component {
 
   state = {
     sensitivityValue: 0.5,
+  };
+
+  componentWillMount(){
   };
 
   gesturesToArray = () => {

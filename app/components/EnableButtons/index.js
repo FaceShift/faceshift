@@ -1,5 +1,6 @@
 import React from "react";
 import FlatButton from 'material-ui/FlatButton';
+import ws from "ws";
 
 import MicOnIcon from "material-ui/svg-icons/av/mic";
 import MicOffIcon from "material-ui/svg-icons/av/mic-off";

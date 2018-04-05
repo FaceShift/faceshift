@@ -33,6 +33,10 @@ module.exports = {
     ]
   },
 
+  node: {
+    net: "empty",
+    tls: "empty"
+  },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.IgnorePlugin(new RegExp("^(fs|ipc)$")),
