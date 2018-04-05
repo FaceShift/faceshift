@@ -52,7 +52,12 @@ function startDetecting(voiceModelsDirectory) {
   mic.pipe(detector);
 }
 
+function stopDetecting() {
+  console.log("TODO: Stop listening")
+}
+
 module.exports = {
   loadModels,
-  startDetecting
+  startDetecting,
+  stopDetecting
 }

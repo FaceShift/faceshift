@@ -11,6 +11,7 @@ import { Modes } from "../../utils/constants/constants";
 import "./styles.css";
 
 import webcam from "../../modules/webcam/webcam";
+import voice from "../../modules/voice/voice"
 
 class EnableButtons extends React.Component{
 
