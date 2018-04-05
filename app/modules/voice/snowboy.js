@@ -39,7 +39,7 @@ function startDetecting(voiceModelsDirectory) {
     });
 
     detector.on('hotword', function (index, hotword, buffer) {
-        console.log('raw', hotword);
+        console.log('hotword', hotword);
     });
 
     const mic = record.start({
@@ -50,7 +50,12 @@ function startDetecting(voiceModelsDirectory) {
     mic.pipe(detector);
 }
 
+let stopDetection = () => {
+    console.log("TODO: STOP")
+}
+
 module.exports = {
     loadModels,
-    startDetecting
+    startDetecting,
+    stopDetection
 }

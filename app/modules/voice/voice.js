@@ -1,5 +1,3 @@
-let fs = require("fs");
-
 let training = require("./training");
 let snowboy = require("./snowboy");
 
@@ -16,8 +14,15 @@ const COMMANDS = {
     mouse: "face shift mouse"
 };
 
-const start = async () => {
+const start = () => {
     console.log("Starting Voice");
+};
+
+const stop = () => {
+    snowboy.stopDetecting();
+};
+
+const trainVoiceModel = async () => {
     let untrained = training.indentifyUntrainedCommands(COMMANDS);
     let voiceSamples = await training.recordCommands(untrained, COMMANDS);
     let modelCount = Object.keys(COMMANDS).length - untrained.length;
@@ -39,11 +44,7 @@ const start = async () => {
             clearInterval(interval)
         }
     }, 1000);
-};
-
-const stop = () => {
-    snowboy.stopDetecting();
-};
+}
 
 let _detection = () => {
     snowboy.loadModels(training.voiceModelsPath);
@@ -52,5 +53,6 @@ let _detection = () => {
 
 module.exports = {
     start,
-    stop
+    stop,
+    trainVoiceModel
 };
