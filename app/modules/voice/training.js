@@ -13,16 +13,22 @@ const recordingOptions = {
 }
 
 function indentifyUntrainedCommands(commands) {
-  var untrainedCommands = []
-  commands.forEach(function (commandPhrase, commandName) {
-    var fileName = _commandNameToFileName(commandName)
-    if (!fs.existsSync(voiceModelsPath + fileName)) {
-      console.log('Voice model missing: ' + commandName)
-      untrainedCommands.push(commandName)
-    } else {
-      console.log('Voice model found: ' + commandName)
+  let untrainedCommands = [];
+
+  Object.keys(commands).forEach(
+    commandKey => function(){
+      const commandPhrase = commands[commandKey];
+      const commandName = commandKey;
+
+      let fileName = _commandNameToFileName(commandName);
+      if (!fs.existsSync(voiceModelsPath + fileName)) {
+        console.log('Voice model missing: ' + commandName);
+        untrainedCommands.push(commandName)
+      } else {
+        console.log('Voice model found: ' + commandName)
+      }
     }
-  })
+  );
 
   return untrainedCommands
 }

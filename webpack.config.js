@@ -23,6 +23,10 @@ module.exports = {
         loader: "babel-loader",
         exclude: /node_modules/,
       },
+      {
+        test: /\.node$/,
+        loader: "node-loader"
+      },
       {test: /\.css$/, loader: "style-loader!css-loader"},
       {test: /\.less$/, loader: "style-loader!css-loader!less-loader"},
       {test: /\.json$/, loader: 'raw-loader'}
