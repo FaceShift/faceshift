@@ -236,8 +236,7 @@ const moveMouse = (xy1/*Prev*/, xy2/*New*/, resolution, imageDataCtx) => {
       }
     }
     else if (preferences.getMode() == "scroll") {
-      factor *= 12.5; //TODO: FIX
-      console.log(factor);
+      factor *= 20; //TODO: FIX
       const midSect = 1/8;
       midSectTop = midHoriz - (midSect*resolution.height*0.5);
       midSectBtm = midHoriz + (midSect*resolution.height*0.5);
@@ -254,10 +253,12 @@ const moveMouse = (xy1/*Prev*/, xy2/*New*/, resolution, imageDataCtx) => {
       //*If nose is in the middle 1/8th of the screen, no scrolling.
       if (pt[1] > midSectBtm) {
         let percent = (pt[1]-midSectBtm)/(resolution.height - midSectBtm);
+        console.log(factor + " : " + percent + " : " + factor*percent);
         mouse.scrollUpDown(-factor*percent);
       }
       else if (pt[1] < midSectTop) {
         let percent = -(pt[1]-midSectTop)/(midSectTop);
+        console.log(factor + " : " + percent + " : " + factor*percent);
         mouse.scrollUpDown(factor*percent);
       }
     }

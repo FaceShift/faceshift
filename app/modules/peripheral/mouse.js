@@ -59,8 +59,8 @@ const toggleBtnUpDwn = (state=null) => {
 const scrollUpDown = (pixels) => {
   if (mouseBtnState == 1)
     mouseToggle("up");
-  /*robot.scrollMouse(x=0,y=pixels); */
-  robot.scrollMouse(pixels, (pixels > 0 ? "up" : "down"))
+  robot.scrollMouse(x=0,y=pixels);
+  //robot.scrollMouse(pixels, (pixels > 0 ? "up" : "down"))
 };
 
 const mouseLeftClick = () => {
