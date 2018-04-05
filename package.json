@@ -16,7 +16,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@google-cloud/speech": "^1.0.1",
     "electron": "^1.8.4",
     "electron-prebuilt": "^0.37.2",
     "material-ui": "^0.20.0",
@@ -25,9 +24,10 @@
     "prop-types": "^15.6.1",
     "react": "^0.14.7",
     "react-dom": "^0.14.3",
-    "request": "^2.83.0",
     "robotjs": "^0.4.7",
-    "sharp": "^0.20.1"
+    "node-record-lpcm16": "^0.3.0",
+    "request": "^2.83.0",
+    "snowboy": "^1.2.0"
   },
   "devDependencies": {
     "babel-core": "^6.7.2",

@@ -12,7 +12,7 @@ let mouseBtnState = 0; //0==up, 1==down
 const moveLeftRight = (pixels) => {
   if (mouseBtnState == 1)
     mouseToggle("up");
-  if(mousePos.x <= maxWidth && mousePos.x >= 0){
+  if(mousePos.x + pixels <= maxWidth && mousePos.x + pixels >= 0){
     mousePos = robot.getMousePos();
     robot.moveMouse(mousePos.x + pixels, mousePos.y);
   }
@@ -22,7 +22,7 @@ const moveLeftRight = (pixels) => {
 const moveUpDown = (pixels) => {
   if (mouseBtnState == 1)
     mouseToggle("up");
-  if(mousePos.y <= maxHeight && mousePos.y >= 0){
+  if(mousePos.y + pixels <= maxHeight && mousePos.y + pixels >= 0){
     mousePos = robot.getMousePos();
     robot.moveMouse(mousePos.x, mousePos.y + pixels);
   }
@@ -30,7 +30,7 @@ const moveUpDown = (pixels) => {
 
 // Move in the horizontal direction
 const dragLeftRight = (pixels) => {
-  if(mousePos.x <= maxWidth && mousePos.x >= 0){
+  if(mousePos.x + pixels <= maxWidth && mousePos.x + pixels >= 0){
     mousePos = robot.getMousePos();
     robot.dragMouse(mousePos.x + pixels, mousePos.y);
   }
@@ -38,7 +38,7 @@ const dragLeftRight = (pixels) => {
 
 // Move in the vertical direction
 const dragUpDown = (pixels) => {
-  if(mousePos.y <= maxHeight && mousePos.y >= 0){
+  if(mousePos.y + pixels <= maxHeight && mousePos.y + pixels >= 0){
     mousePos = robot.getMousePos();
     robot.dragMouse(mousePos.x, mousePos.y + pixels);
   }

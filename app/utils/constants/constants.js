@@ -4,6 +4,7 @@ export const Gestures = Object.freeze({
   BLINK: "Blink",
 });
 
+
 export const Modes = Object.freeze([
   {
     type: "MOUSE_MODE",
