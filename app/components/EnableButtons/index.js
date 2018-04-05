@@ -12,7 +12,7 @@ import "./styles.css";
 
 import webcam from "../../modules/webcam/webcam";
 
-import * as controller from "../../modules/controller/controller";
+import * as controller from "../../modules/controller/controller_pref";
 
 class EnableButtons extends React.Component{
 
@@ -23,6 +23,7 @@ class EnableButtons extends React.Component{
 
   onCameraButtonClicked = () => {
     this.setState({ isWebcamOn: !this.state.isWebcamOn});
+    controller.setTrackBool(!this.state.isWebcamOn);
   };
 
 

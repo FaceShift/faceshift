@@ -29,7 +29,7 @@ startCamera = () => {
 };
 
 stopCamera = () => {
-  console.log("stopped");
+  //webcam.pause();
 };
 
 onStreamDimensionsAvailable = (callback) => {

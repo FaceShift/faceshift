@@ -1,4 +1,5 @@
 const robot = require("robotjs");
+const contr_prefs = require("../controller/controller_pref");
 
 // Resolution of the
 const screenSize = robot.getScreenSize();
@@ -9,6 +10,8 @@ let mouseBtnState = 0; //0==up, 1==down
 
 // Move in the horizontal direction
 const moveLeftRight = (pixels) => {
+  if (mouseBtnState == 1)
+    mouseToggle("up");
   if(mousePos.x <= maxWidth && mousePos.x >= 0){
     mousePos = robot.getMousePos();
     robot.moveMouse(mousePos.x + pixels, mousePos.y);
@@ -17,6 +20,8 @@ const moveLeftRight = (pixels) => {
 
 // Move in the vertical direction
 const moveUpDown = (pixels) => {
+  if (mouseBtnState == 1)
+    mouseToggle("up");
   if(mousePos.y <= maxHeight && mousePos.y >= 0){
     mousePos = robot.getMousePos();
     robot.moveMouse(mousePos.x, mousePos.y + pixels);
@@ -52,6 +57,8 @@ const toggleBtnUpDwn = (state=null) => {
 }
 
 const scrollUpDown = (pixels) => {
+  if (mouseBtnState == 1)
+    mouseToggle("up");
   robot.scrollMouse(0,pixels);
 }
 
