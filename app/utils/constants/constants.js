@@ -1,11 +1,11 @@
-export const Gestures = Object.freeze({
+ const Gestures = Object.freeze({
   RIGHT_EYE_WINK: "Right Eye Wink",
   LEFT_EYE_WINK: "Left Eye Wink",
   BLINK: "Blink",
 });
 
 
-export const Modes = Object.freeze([
+const Modes = Object.freeze([
   {
     type: "MOUSE_MODE",
     value: "Mouse Mode",
@@ -19,3 +19,11 @@ export const Modes = Object.freeze([
     value: "Drag and Hold",
   },
 ]);
+
+const MouseModes = Object.freeze({
+  mouse: "mouse",
+  scroll: "scroll",
+  drag: "drag"
+});
+
+module.exports = {Modes, Gestures, MouseModes};

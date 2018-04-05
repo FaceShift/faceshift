@@ -1,23 +1,46 @@
 const preferences = require("../../preferences/preferences");
+const constants = require("../../utils/constants/constants");
+const MouseModes = constants.MouseModes;
 
+global.track = true;
+
+/////////////////////
+// Setters
+/////////////////////
+
+//TODO: Do these get called from snowboy.js?????
 const updatePreference = (key, val) => {
   preferences.updatePreference(key, val);
 }
 
-global.track = true;
-
-//TODO: Do these get called from snowboy.js?????
 const enterMouseMode = () => {
-  updatePreference("mode", "mouse");
+  updatePreference("mode", MouseModes.mouse);
 }
 
 const enterScrollMode = () => {
-  updatePreference("mode", "scroll");
+  updatePreference("mode", MouseModes.scroll);
 }
 
 const enterDragMode = () => {
-  updatePreference("mode", "drag");
+  updatePreference("mode", MouseModes.drag);
 }
+
+const setLeftClick = (trigger) => {
+  updatePreference("left-click", trigger);
+}
+
+const setRightClick = (trigger) => {
+  updatePreference("right-click", trigger);
+}
+
+const setTrackBool = (bool) => {
+  track = bool;
+  console.log("new bool: " + track);
+}
+
+/////////////////////
+// Getters
+/////////////////////
 
 const getMode = () => {
   return preferences.getMode();
@@ -31,15 +54,14 @@ const getRightClick = () => {
   return preferences.getRightClick();
 }
 
-const setTrackBool = (bool) => {
-  track = bool;
-  console.log("new bool: " + track);
-}
-
 const getTrackBool = () => {
   return global.track;
 }
 
-module.exports = { enterMouseMode, enterScrollMode, enterDragMode,
-                    getMode, getLeftClick, getRightClick,
-                    setTrackBool, getTrackBool, track };
+module.exports = { updatePreference,
+                    enterMouseMode, enterScrollMode, enterDragMode, 
+                    getMode,
+                    setLeftClick, setRightClick,              
+                    getLeftClick, getRightClick,
+                    setTrackBool, 
+                    getTrackBool };
