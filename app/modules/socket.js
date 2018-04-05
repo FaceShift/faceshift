@@ -1,19 +1,18 @@
-const ws = require('ws');
+var io = require("socket.io")(6767);
 
 let createSocketServer = (onMessageCallback) => {
     console.log("createSocketServer gets called");
-    const socketServer = new ws.Server({
-        port: 6767
-    }, () => {
-        console.log('Socket server listening on port 6767');
-    });
 
-    socketServer.on('connection', socket => {
-        console.log('Client connected');
-        // set up listeners
-        socket.on('close', (code, reason) => console.log('Client disconnected because: ${reason}'));
-        socket.on('message', message => {
-            onMessageCallback(message)
+    io.on("connection", function (socket) {
+        io.emit("this", { will: "be received by everyone"});
+
+        socket.on('training', () => {
+            console.log("Socket.on('training')");
+            onMessageCallback('training');
+        });
+
+        socket.on("disconnect", function () {
+            console.log("User disconnected")
         });
     });
 }

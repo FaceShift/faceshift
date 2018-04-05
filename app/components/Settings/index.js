@@ -1,5 +1,4 @@
 import React from "react";
-import ws from "ws";
 
 import DropDown from "../DropDown/index";
 import { Gestures } from "../../utils/constants/constants";
@@ -9,18 +8,22 @@ import Divider from 'material-ui/Divider';
 
 import preferencesJSON from "../../utils/preferences/preferences.json";
 
-const Websocket = new ws("ws://localhost:6767");
+let io = require('socket.io-client')
+let socket = io("http://localhost:6767");
+
 class Settings extends React.Component {
 
   state = {
     sensitivityValue: 0.5,
   };
 
-  componentWillMount(){
-    console.log("Web socket", Websocket);
-    Websocket.send("train", () => {
-      return console.log("sent the train command");
-    });
+  componentWillMount() {
+       // TIP: io() with no args does auto-discovery
+      socket.on('connect', function () { // TIP: you can avoid listening on `connect` and listen on events directly too!
+          socket.emit('training', function (data) {
+              console.log(data); // data will be 'woot'
+          });
+      });
   };
 
   gesturesToArray = () => {

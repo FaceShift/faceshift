@@ -5,8 +5,9 @@ let voice = require("../app/modules/voice/voice");
 let socket = require('../app/modules/socket');
 
 let _onMessage = (message) => {
+    console.log("_onMessage()", message)
     switch (message) {
-        case "train":
+        case "training":
             console.log("Training!")
             //voice.trainVoiceModel();
             break;
