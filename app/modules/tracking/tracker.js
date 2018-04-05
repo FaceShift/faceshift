@@ -7,6 +7,8 @@ let brfManager;
 let resolution;
 let brfv4;
 
+let track = true;
+
 function startTrackFaces(_webcam, _imageData, _brfManager, _resolution, _brfv4) {
   webcam = _webcam;
   imageData = _imageData;
@@ -18,7 +20,8 @@ function startTrackFaces(_webcam, _imageData, _brfManager, _resolution, _brfv4) 
 
 function trackFaces() {
 
-  controller.addManualPoints(brfManager);
+  if (track)
+    controller.addManualPoints(brfManager);
 
   let imageDataCtx = imageData.getContext("2d");
   imageDataCtx.setTransform(-1.0, 0, 0, 1, resolution.width, 0); // mirrored for draw of video
@@ -26,10 +29,15 @@ function trackFaces() {
   imageDataCtx.setTransform(1.0, 0, 0, 1, 0, 0); // unmirrored for draw of results
   brfManager.update(imageDataCtx.getImageData(0, 0, resolution.width, resolution.height).data);
 
-  controller.processFaces(brfManager, resolution, brfv4, imageDataCtx);
+  if (track) 
+    controller.processFaces(brfManager, resolution, brfv4, imageDataCtx);
 
   //Update
   requestAnimationFrame(trackFaces);
 }
 
-module.exports = { startTrackFaces };
+function setTrackBool(bool) {
+  track = bool;
+}
+
+module.exports = { startTrackFaces, setTrackBool };

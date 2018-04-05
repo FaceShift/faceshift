@@ -1,3 +1,4 @@
+let tracker = require("../tracking/tracker")
 let draw = require("../tracking/draw");
 let mouse = require("../peripheral/mouse");
 let blink = require("../tracking/blink");
@@ -257,4 +258,28 @@ function updatePreference(key, val) {
   preferences.updatePreference(key, val);
 }
 
-module.exports = { addManualPoints, processFaces, updatePreference };
+//TODO: Do these get called from snowboy.js?????
+function enterMouseMode() {
+  updatePreference("mode", "mouse");
+}
+
+function enterScrollMode() {
+  updatePreference("mode", "scroll");
+}
+
+function enterDragMode() {
+  updatePreference("mode", "drag");
+}
+
+function stopTracking() {
+  tracker.setTrackBool(false);
+  console.log("GG");
+}
+
+function resumeTracking() {
+  tracker.setTrackBool(true);
+}
+
+module.exports = { addManualPoints, processFaces, updatePreference,
+                    enterMouseMode, enterScrollMode, enterDragMode,
+                    stopTracking, resumeTracking };

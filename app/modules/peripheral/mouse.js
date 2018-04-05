@@ -8,7 +8,7 @@ let mousePos = robot.getMousePos();
 let mouseBtnState = 0; //0==up, 1==down
 
 // Move in the horizontal direction
-moveLeftRight = (pixels) => {
+const moveLeftRight = (pixels) => {
   if(mousePos.x <= maxWidth && mousePos.x >= 0){
     mousePos = robot.getMousePos();
     robot.moveMouse(mousePos.x + pixels, mousePos.y);
@@ -16,7 +16,7 @@ moveLeftRight = (pixels) => {
 };
 
 // Move in the vertical direction
-moveUpDown = (pixels) => {
+const moveUpDown = (pixels) => {
   if(mousePos.y <= maxHeight && mousePos.y >= 0){
     mousePos = robot.getMousePos();
     robot.moveMouse(mousePos.x, mousePos.y + pixels);
@@ -24,7 +24,7 @@ moveUpDown = (pixels) => {
 };
 
 // Move in the horizontal direction
-dragLeftRight = (pixels) => {
+const dragLeftRight = (pixels) => {
   if(mousePos.x <= maxWidth && mousePos.x >= 0){
     mousePos = robot.getMousePos();
     robot.dragMouse(mousePos.x + pixels, mousePos.y);
@@ -32,7 +32,7 @@ dragLeftRight = (pixels) => {
 };
 
 // Move in the vertical direction
-dragUpDown = (pixels) => {
+const dragUpDown = (pixels) => {
   if(mousePos.y <= maxHeight && mousePos.y >= 0){
     mousePos = robot.getMousePos();
     robot.dragMouse(mousePos.x, mousePos.y + pixels);
@@ -40,7 +40,7 @@ dragUpDown = (pixels) => {
 };
 
 //State can be either string "up" or "down"
-toggleBtnUpDwn = (state=null) => {
+const toggleBtnUpDwn = (state=null) => {
   if (state==null) {
     mouseBtnState ^= 1; //Toggle between down/up
     robot.mouseToggle(mouseBtnState==1 ? "down" : "up");
@@ -51,15 +51,15 @@ toggleBtnUpDwn = (state=null) => {
   }
 }
 
-scrollUpDown = (pixels) => {
+const scrollUpDown = (pixels) => {
   robot.scrollMouse(0,pixels);
 }
 
-mouseLeftClick = () => {
+const mouseLeftClick = () => {
   robot.mouseClick("left");
 };
 
-mouseRightClick = () => {
+const mouseRightClick = () => {
   robot.mouseClick("right");
 };
 

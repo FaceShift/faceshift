@@ -12,6 +12,8 @@ import "./styles.css";
 
 import webcam from "../../modules/webcam/webcam";
 
+import * as controller from "../../modules/controller/controller";
+
 class EnableButtons extends React.Component{
 
   state = {
