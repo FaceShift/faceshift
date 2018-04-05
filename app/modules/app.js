@@ -2,9 +2,7 @@ let webcam = require("../app/modules/webcam/webcam");
 let trackerSetup = require("../app/modules/tracking/setup");
 let preferences = require("../app/preferences/preferences");
 let voice = require("../app/modules/voice/voice");
-let socket = require('./socket')
-
-socket.createSocketServer(_onMessage);
+let socket = require('../app/modules/socket');
 
 let _onMessage = (message) => {
     switch (message) {
@@ -16,7 +14,10 @@ let _onMessage = (message) => {
             console.log("Uncaught message:", message);
             break;
     }
-}
+};
+
+socket.createSocketServer(_onMessage);
+
 
 preferences.loadPreferences();
 webcam.startCamera();

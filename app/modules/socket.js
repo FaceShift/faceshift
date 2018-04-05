@@ -1,6 +1,7 @@
 const ws = require('ws');
 
 let createSocketServer = (onMessageCallback) => {
+    console.log("createSocketServer gets called");
     const socketServer = new ws.Server({
         port: 6767
     }, () => {

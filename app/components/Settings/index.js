@@ -9,6 +9,7 @@ import Divider from 'material-ui/Divider';
 
 import preferencesJSON from "../../utils/preferences/preferences.json";
 
+const Websocket = new ws("ws://localhost:6767");
 class Settings extends React.Component {
 
   state = {
@@ -16,6 +17,10 @@ class Settings extends React.Component {
   };
 
   componentWillMount(){
+    console.log("Web socket", Websocket);
+    Websocket.send("train", () => {
+      return console.log("sent the train command");
+    });
   };
 
   gesturesToArray = () => {
