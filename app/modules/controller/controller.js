@@ -1,8 +1,9 @@
-let draw = require("../tracking/draw");
-let mouse = require("../peripheral/mouse");
-let blink = require("../tracking/blink");
-let mouth = require("../tracking/mouth");
-let preferences = require("../../preferences/preferences");
+const tracker = require("../tracking/tracker")
+const draw = require("../tracking/draw");
+const mouse = require("../peripheral/mouse");
+const blink = require("../tracking/blink");
+const mouth = require("../tracking/mouth");
+const preferences = require("../../preferences/preferences");
 
 //Used in point tracking
 let pointsToAdd = [];       //Used in tracking after face is lost
@@ -13,7 +14,7 @@ let prevWholeFace = [];     //Used to detect blinks/facial changes
 
 let userClicked = false; //Used to change line color
 
-function addManualPoints(brfManager) {
+const addManualPoints = (brfManager) => {
   //Add manual points to be tracked
   if (pointsToAdd.length > 0) {
     brfManager.reset();
@@ -22,7 +23,7 @@ function addManualPoints(brfManager) {
   }
 }
 
-function processFaces(brfManager, resolution, brfv4, imageDataCtx) {
+const processFaces = (brfManager, resolution, brfv4, imageDataCtx) => {
   let faces = brfManager.getFaces();
   let faceFound = false;
   for (let i = 0; i < faces.length; i++) {
@@ -50,7 +51,7 @@ function processFaces(brfManager, resolution, brfv4, imageDataCtx) {
       userClicked = false;
       //Check for clicks!
       if (preferences.getLeftClick() == "mouth" || preferences.getRightClick() == "mouth") {
-        mouthRet = mouth.mouthOpened(face.vertices);
+        let mouthRet = mouth.mouthOpened(face.vertices);
         userClicked = mouthRet.waitingForTimeout;
         if (mouthRet.mouth) {
           if (preferences.getLeftClick() == "mouth") {
@@ -71,7 +72,7 @@ function processFaces(brfManager, resolution, brfv4, imageDataCtx) {
       if ((preferences.getLeftClick()+preferences.getRightClick()).includes("blink")) {
         //Click if user has blinked
         if (prevWholeFace != []) {
-          blinkRet = blink.blinked(prevWholeFace, face.vertices,
+          let blinkRet = blink.blinked(prevWholeFace, face.vertices,
             preferences.getLeftClick().includes("blink"),
             preferences.getRightClick().includes("blink"));
           if (blinkRet.left && blinkRet.right) {
@@ -182,7 +183,7 @@ function processFaces(brfManager, resolution, brfv4, imageDataCtx) {
   }
 }
 
-function moveMouse(xy1/*Prev*/, xy2/*New*/, resolution, imageDataCtx) {
+const moveMouse = (xy1/*Prev*/, xy2/*New*/, resolution, imageDataCtx) => {
   if (xy1.length > 0 && xy2.length > 0) {
     let xTotal = 0;
     let yTotal = 0;
@@ -234,7 +235,7 @@ function moveMouse(xy1/*Prev*/, xy2/*New*/, resolution, imageDataCtx) {
     }
     else if (preferences.getMode() == "scroll") {
       factor *= 22.5;
-      midSect = 1/8;
+      const midSect = 1/8;
       midSectTop = midHoriz - (midSect*resolution.height*0.5);
       midSectBtm = midHoriz + (midSect*resolution.height*0.5);
 
@@ -253,8 +254,4 @@ function moveMouse(xy1/*Prev*/, xy2/*New*/, resolution, imageDataCtx) {
   }
 }
 
-function updatePreference(key, val) {
-  preferences.updatePreference(key, val);
-}
-
-module.exports = { addManualPoints, processFaces, updatePreference };
+module.exports = { addManualPoints, processFaces };

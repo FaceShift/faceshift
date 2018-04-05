@@ -1,4 +1,4 @@
-let mouse = require("../modules/peripheral/mouse");
+//const mouse = require("../modules/peripheral/mouse");
 const fs = require('fs');
 
 /*
@@ -13,24 +13,31 @@ const fs = require('fs');
 */
 let jsonPreferences = {}; //Will hold all preferences as a json object
 
-writeInProgress = false;
-queue = [];
+let writeInProgress = false;
+let queue = [];
 
-function loadPreferences() {
+const loadPreferences = () => {
   fs.readFile('./app/preferences/preferences.json', (err, data) => {
     if (err) {
       console.log("Could not load user preferences!");
       console.log(err);
       //If error reading preferences from json, assume defaults
-      mode = "mouse";
+      
+      /*mode = "mouse";
       leftClick = "left-blink";
-      rightClick = "right-blink";
+      rightClick = "right-blink";*/
+
+      jsonPreferences = {};
+      jsonPreferences["mode"] = "mouse";
+      jsonPreferences["left-click"] = "left-blink";
+      jsonPreferences["right-click"] = "right-blink";
+
       return;
     }
     jsonPreferences = JSON.parse(data);
-    mode = jsonPreferences["mode"];
+    /*mode = jsonPreferences["mode"];
     leftClick = jsonPreferences["left-click"];
-    rightClick = jsonPreferences["right-click"];
+    rightClick = jsonPreferences["right-click"];*/
   });
 }
 
@@ -45,19 +52,19 @@ function loadPreferences() {
 * right-click:
 * "right-blink", ...
 */
-function updatePreference(key, val) {
+const updatePreference = (key, val) => {
   queue.push([key,val]);
   updateNext();
 }
 
-function updateNext() {
+const updateNext = () => {
   if (writeInProgress || queue.length == 0)
     return;
 
   writeInProgress = true;  
-  keyVal = queue.shift();
-  key = keyVal[0];
-  val = keyVal[1];
+  let keyVal = queue.shift();
+  let key = keyVal[0];
+  let val = keyVal[1];
 
   //Make sure not to illegally set click method (both click methods may not be mouth):
   if ((key=="left-click" && val=="mouth" && jsonPreferences["right-click"]=="mouth") ||
@@ -75,21 +82,21 @@ function updateNext() {
       console.log(err);
       jsonPreferences[key] = origVal;
     }
-    if (key=="mode" && val!="drag") //Check only after mode has actually been switched
-      mouse.toggleBtnUpDwn("up"); //Whenever mode switches away from drag mode, make sure mouse goes up.
+    //if (key=="mode" && val!="drag") //Check only after mode has actually been switched
+      //mouse.toggleBtnUpDwn("up"); //Whenever mode switches away from drag mode, make sure mouse goes up.
     updateNext();
   });
 }
 
-function getMode() {
+const getMode = () => {
   return jsonPreferences['mode'];
 }
 
-function getLeftClick() {
+const getLeftClick = () => {
   return jsonPreferences["left-click"];
 }
 
-function getRightClick() {
+const getRightClick = () => {
   return jsonPreferences["right-click"];
 }
 

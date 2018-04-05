@@ -16,7 +16,7 @@ let windowPosition = [20, 20];
 function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({width: 335, height: 700});
-  mainWindow.setMenu(null);
+  //mainWindow.setMenu(null);
 
   resetPos(); // Move window into position
 

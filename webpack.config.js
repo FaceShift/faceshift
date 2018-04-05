@@ -23,6 +23,10 @@ module.exports = {
         loader: "babel-loader",
         exclude: /node_modules/,
       },
+      {
+        test: /\.node$/,
+        loader: "node-loader"
+      },
       {test: /\.css$/, loader: "style-loader!css-loader"},
       {test: /\.less$/, loader: "style-loader!css-loader!less-loader"},
       {test: /\.json$/, loader: 'raw-loader'}
@@ -31,8 +35,9 @@ module.exports = {
 
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.IgnorePlugin(new RegExp("^(fs|ipc)$")),
+    new webpack.IgnorePlugin(new RegExp("^(ipc)$")),
     new webpack.ExternalsPlugin('commonjs', [
+      'fs',
       'desktop-capturer',
       'electron',
       'ipc-main',
