@@ -118,4 +118,4 @@ const getSensitivity = () => {
   return jsonPreferences["sensitivity"];
 }
 
-module.exports = { loadPreferences, updatePreference, getMode, getLeftClick, getRightClick };
+module.exports = { loadPreferences, updatePreference, getMode, getLeftClick, getRightClick, getSensitivity };
