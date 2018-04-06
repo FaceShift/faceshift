@@ -11,7 +11,7 @@ import SelectField from "material-ui/SelectField";
 import MenuItem from "material-ui/MenuItem";
 import {Card, CardText} from "material-ui/Card";
 
-let io = require('socket.io-client')
+let io = require('socket.io-client');
 let socket = io("http://localhost:6767");
 
 class Settings extends React.Component {
@@ -22,7 +22,17 @@ class Settings extends React.Component {
         leftClickValue: 1,
         doubleClickValue: 2,
         didSettingChange: false,
+        textToDisplay: "Voice Model untrained",
     };
+
+    componentWillMount() {
+        socket.on("message", (message) => {
+            this.setState({textToDisplay: message});
+        });
+
+        socket.emit("lastMessage", "message");
+    };
+
     gesturesToArray = () => {
         const gestureArray = [];
         Object.keys(Gestures).forEach(
@@ -117,6 +127,9 @@ class Settings extends React.Component {
             <Card>
                 <CardText>
                     <FlatButton label="Train" onClick={() => socket.emit('train')}/>
+                    <div>
+                        {this.state.textToDisplay}
+                    </div>
                 </CardText>
             </Card>
         </div>
@@ -158,15 +171,6 @@ class Settings extends React.Component {
     renderSensitivitySlider = () => <BasicSlider
         currentValue={this.state.sensitivityValue}
         onChange={this.onSensitivityChanged}/>;
-
-    componentWillMount() {
-        socket.on('connect', function () {
-            console.log("React connected to socket")
-            // socket.emit('training', function (data) {
-            //     console.log(data); // data will be 'woot'
-            // });
-        });
-    };
 
     render() {
         return this.renderNewSettings();
