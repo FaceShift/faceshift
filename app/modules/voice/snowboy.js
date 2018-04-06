@@ -20,7 +20,6 @@ function loadModels(voiceModelsDirectory) {
 
 
 function startDetecting(voiceModelsDirectory) {
-    console.log('Listening!')
     const detector = new Detector({
         resource: 'voice-models/common.res',
         models: models,
@@ -53,7 +52,6 @@ function startDetecting(voiceModelsDirectory) {
 
 let stopDetecting = () => {
     record.stop();
-    console.log("Stopped listening")
 }
 
 module.exports = {

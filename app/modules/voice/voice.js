@@ -7,27 +7,50 @@ const COMMANDS = {
 };
 const COMMAND_COUNT = Object.keys(COMMANDS).length;
 
-const start = () => {
-    trainVoiceModel();
+let lastMessage = "Voice Model Is Untrained";
+
+let messageCallback = (message) => {
+    console.log(message);
 };
 
-const stop = () => {
+let start = () => {
+    if (isVoiceModelTrained()) {
+        _startDetecting();
+        let availableCommands = "";
+        Object.keys(COMMANDS).map(
+            command => {
+                availableCommands += COMMANDS[command] + " | ";
+            }
+        );
+        sendMessageToMessageCallback("Voice Model Trained. " +
+            "Listening for commands now. " +
+            "Available commands are | " +
+            availableCommands);
+    }
+};
+
+let stop = () => {
     snowboy.stopDetecting();
+    sendMessageToMessageCallback("Not listening for commands")
 };
 
-const retrainVoiceModel = () => {
+let retrainVoiceModel = () => {
     stop();
-    let untrained = training.identifyUntrainedCommands(COMMANDS);
-    if (COMMAND_COUNT - untrained.length === COMMAND_COUNT) {
+    if (isVoiceModelTrained()) {
         training.deleteVoiceModels();
     }
-    start();
+    trainVoiceModel();
 }
 
-const trainVoiceModel = async () => {
+let isVoiceModelTrained = () => {
+    let untrained = training.identifyUntrainedCommands(COMMANDS);
+    return COMMAND_COUNT - untrained.length === COMMAND_COUNT;
+}
+
+let trainVoiceModel = async () => {
     let untrained = training.identifyUntrainedCommands(COMMANDS);
     let modelCount = COMMAND_COUNT - untrained.length;
-    let voiceSamples = await training.recordCommands(untrained, COMMANDS);
+    let voiceSamples = await training.recordCommands(untrained, COMMANDS, sendMessageToMessageCallback);
     Object.keys(voiceSamples).map(
         voiceSample => {
             training.requestVoiceModels(voiceSample, COMMANDS[voiceSample], voiceSamples[voiceSample], () => {
@@ -38,13 +61,26 @@ const trainVoiceModel = async () => {
 
     let interval = setInterval(() => {
         if (modelCount === COMMAND_COUNT) {
-            _detection();
+            start();
             clearInterval(interval)
         }
     }, 1000);
 }
 
-let _detection = () => {
+let setMessageCallback = (newMessageCallback) => {
+    messageCallback = newMessageCallback;
+}
+
+let sendMessageToMessageCallback = (message) => {
+    lastMessage = message;
+    messageCallback(lastMessage);
+}
+
+let getLastMessage = () => {
+    return lastMessage;
+}
+
+let _startDetecting = () => {
     snowboy.loadModels(training.voiceModelsPath);
     snowboy.startDetecting(training.voiceModelsPath);
 };
@@ -52,5 +88,7 @@ let _detection = () => {
 module.exports = {
     start,
     stop,
-    retrainVoiceModel
+    retrainVoiceModel,
+    setMessageCallback,
+    getLastMessage
 };
