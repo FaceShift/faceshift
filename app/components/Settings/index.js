@@ -121,7 +121,7 @@ class Settings extends React.Component {
     <div>
       <Card>
         <CardText>
-          Train voice model
+          <FlatButton label="Train" onClick={() => console.log("train stuff man")}/>
         </CardText>
       </Card>
     </div>
