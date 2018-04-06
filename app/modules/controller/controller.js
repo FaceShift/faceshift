@@ -78,8 +78,8 @@ const processFaces = (brfManager, resolution, brfv4, imageDataCtx) => {
         //Click if user has blinked
         if (prevWholeFace != []) {
           let blinkRet = blink.blinked(prevWholeFace, face.vertices,
-            preferences.getLeftClick().includes("blink"),
-            preferences.getRightClick().includes("blink"));
+            preferences.getLeftClick().toLowerCase().includes("blink"),
+            preferences.getRightClick().toLowerCase().includes("blink"));
           if (blinkRet.left && blinkRet.right) {
             //Maybe do something when both eyes blink? (Probably not)
           }

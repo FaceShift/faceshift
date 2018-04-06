@@ -12,7 +12,6 @@ import MenuItem from "material-ui/MenuItem";
 import {Card, CardText} from "material-ui/Card";
 
 import preferencesJSON from "../../utils/preferences/preferences.json";
-import * as controller from "../../modules/controller/controller_pref";
 
 class Settings extends React.Component {
 
@@ -77,10 +76,24 @@ class Settings extends React.Component {
       <div/> : <Card><CardText>Options cannot share the same gestures</CardText></Card>
   };
 
+  onRightClickChange = (event, index, value) => {
+    this.setState({rightClickValue: value, didSettingsChange: true}, () => {
+      this.isDropdownSettingValid() ? controller.setRightClick(value) : ""
+    });
+  };
+
+  onLeftClickChange = (event, index, value) => {
+    this.setState({leftClickValue: value, didSettingsChange: true}, () => {
+        this.isDropdownSettingValid() ? controller.setLeftClick(value) : ""
+
+    });
+  };
+
+
   renderRightClick = () => (
     <div>
       <SelectField floatingLabelText="Right Click" value={this.state.rightClickValue}
-                   onChange={(event, index, value) => this.setState({rightClickValue: value, didSettingChange: true})}>
+                   onChange={this.onRightClickChange}>
         {this.renderDropdownOptions()}
       </SelectField>
     </div>
@@ -89,7 +102,7 @@ class Settings extends React.Component {
   renderLeftClick = () => (
     <div>
       <SelectField floatingLabelText="Left Click" value={this.state.leftClickValue}
-                   onChange={(event, index, value) => this.setState({leftClickValue: value, didSettingChange: true})}>
+                   onChange={this.onLeftClickChange}>
         {this.renderDropdownOptions()}
       </SelectField>
     </div>
