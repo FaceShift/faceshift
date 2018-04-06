@@ -5,8 +5,10 @@ let preferences = require("../app/preferences/preferences");
 let voice = require("../app/modules/voice/voice");
 let socket = require('../app/modules/socket');
 
+voice.start();
+
 let onTraining = () => {
-    voice.trainVoiceModel();
+    voice.retrainVoiceModel();
 };
 
 let onMicStateChange = (micState) => {

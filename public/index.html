@@ -20,9 +20,9 @@
     const electron = require("electron");
     const ipc = electron.ipcRenderer;
     const imageData = document.getElementById("_imageData");
-    imageData.addEventListener("click", function(e){
-      e.preventDefault();
-      ipc.send("resize");
+    imageData.addEventListener("click", function (e) {
+        e.preventDefault();
+        ipc.send("resize");
     });
 </script>
 <script src="../app/modules/app.js"></script>
