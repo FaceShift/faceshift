@@ -9,7 +9,7 @@ import WebcamOffIcon from "material-ui/svg-icons/av/videocam-off"
 import RadioButtons from "../RadioButtons";
 
 import { Modes, MouseModes } from "../../utils/constants/constants";
-import "./styles.css";
+import "./styles.css"; 
 
 import webcam from "../../modules/webcam/webcam";
 
@@ -45,15 +45,6 @@ class EnableButtons extends React.Component{
       onClick={this.onCameraButtonClicked}
     />
   );
-
-  // renderModeRadioButtons = () => (
-  //       <RadioButtonGroup name={this.props.name} defaultSelected={this.props.options[0].value}>
-  //         <RadioButton label="Mouse" styles={styles.radioButton} value={option.value} key={option.type}/>
-  //         <RadioButton label="Scroll" styles={styles.radioButton} value={option.value} key={option.type}/>
-  //         <RadioButton label="Hold + Drag" styles={styles.radioButton} value={option.value} key={option.type}/>
-  //       </RadioButtonGroup>
-  //
-  //   );
 
   onRadioButtonClick = (value) => {
     console.log("Switched mode to ", value);

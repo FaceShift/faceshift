@@ -5,6 +5,10 @@ const blink = require("../tracking/blink");
 const mouth = require("../tracking/mouth");
 const preferences = require("../../utils/preferences/preferences");
 
+const constants = require("../../utils/constants/constants");
+const MouseModes = constants.MouseModes;
+const InputOptions = constants.InputOptions;
+
 //Used in point tracking
 let pointsToAdd = [];       //Used in tracking after face is lost
 let lostFacePoints = [];    //Used in tracking after face is lost
@@ -50,15 +54,15 @@ const processFaces = (brfManager, resolution, brfv4, imageDataCtx) => {
 
       userClicked = false;
       //Check for clicks!
-      if (preferences.getLeftClick() == "mouth" || preferences.getRightClick() == "mouth") {
+      if (preferences.getLeftClick() == InputOptions.mouth || preferences.getRightClick() == InputOptions.mouth) {
         let mouthRet = mouth.mouthOpened(face.vertices);
         userClicked = mouthRet.waitingForTimeout;
         if (mouthRet.mouth) {
-          if (preferences.getLeftClick() == "mouth") {
+          if (preferences.getLeftClick() == InputOptions.mouth) {
             //Left click
             //If in drag mode, mouth will toggle mouse down/up.
             // else, mouth will left click mouse.
-            if (preferences.getMode() == "drag")
+            if (preferences.getMode() == MouseModes.drag)
               mouse.toggleBtnUpDwn();
             else
               mouse.mouseLeftClick();
@@ -70,7 +74,9 @@ const processFaces = (brfManager, resolution, brfv4, imageDataCtx) => {
         }
       }
 
+      //console.log(`${preferences.getLeftClick()}${preferences.getRightClick()}`);
       if ((`${preferences.getLeftClick()}${preferences.getRightClick()}`).includes("blink")) {
+        console.log("Yeah, it worked");
         //Click if user has blinked
         if (prevWholeFace != []) {
           let blinkRet = blink.blinked(prevWholeFace, face.vertices,
@@ -80,18 +86,18 @@ const processFaces = (brfManager, resolution, brfv4, imageDataCtx) => {
             //Maybe do something when both eyes blink? (Probably not)
           }
           else {
-            if (preferences.getLeftClick() == "left-blink") {
+            if (preferences.getLeftClick() == InputOptions.leftblink) {
               userClicked = blinkRet.waitingForTimeout || userClicked;
               if (blinkRet.left) {
                 //If in drag mode, left blink will toggle mouse down/up.
                 // else, left blink will left click mouse.
-                if (preferences.getMode() == "drag")
+                if (preferences.getMode() == MouseModes.drag)
                   mouse.toggleBtnUpDwn();
                 else
                   mouse.mouseLeftClick();
               }
             }
-            if (preferences.getRightClick() == "right-blink") {
+            if (preferences.getRightClick() == InputOptions.rightblink) {
               userClicked = blinkRet.waitingForTimeout || userClicked;
               if (blinkRet.right)
                 mouse.mouseRightClick();
@@ -206,7 +212,7 @@ const moveMouse = (xy1/*Prev*/, xy2/*New*/, resolution, imageDataCtx) => {
     let midVert = resolution.width/2;
 
     //Perform action based on current mode:
-    if (preferences.getMode() == "mouse" || preferences.getMode() == "drag") {
+    if (preferences.getMode() == MouseModes.mouse || preferences.getMode() == MouseModes.drag) {
       let midSectTop = midHoriz - (midSectH*resolution.height*0.5);
       let midSectBtm = midHoriz + (midSectH*resolution.height*0.5);
       let midSectLeft = midVert - (midSectW*resolution.width*0.5);
@@ -223,20 +229,20 @@ const moveMouse = (xy1/*Prev*/, xy2/*New*/, resolution, imageDataCtx) => {
         //Direct movement!
         //mouse.moveLeftRight(xTotal*factor);
         //mouse.moveUpDown(yTotal*factor);
-        preferences.getMode() == "mouse" ? mouse.moveLeftRight(xTotal*factor) : mouse.dragLeftRight(xTotal*factor);
-        preferences.getMode() == "mouse" ? mouse.moveUpDown(yTotal*factor) : mouse.dragUpDown(yTotal*factor);
+        preferences.getMode() == MouseModes.mouse ? mouse.moveLeftRight(xTotal*factor) : mouse.dragLeftRight(xTotal*factor);
+        preferences.getMode() == MouseModes.mouse ? mouse.moveUpDown(yTotal*factor) : mouse.dragUpDown(yTotal*factor);
       }
       else {
         xTotal = pt[0] - midVert;
         yTotal = pt[1] - midHoriz;
         factor *= 15;
         let percent = xTotal/resolution.width;
-        preferences.getMode() == "mouse" ? mouse.moveLeftRight(percent*factor) : mouse.dragLeftRight(percent*factor);
+        preferences.getMode() == MouseModes.mouse ? mouse.moveLeftRight(percent*factor) : mouse.dragLeftRight(percent*factor);
         percent = yTotal/resolution.height;
-        preferences.getMode() == "mouse" ? mouse.moveUpDown(percent*factor) : mouse.dragUpDown(percent*factor);
+        preferences.getMode() == MouseModes.mouse ? mouse.moveUpDown(percent*factor) : mouse.dragUpDown(percent*factor);
       }
     }
-    else if (preferences.getMode() == "scroll") {
+    else if (preferences.getMode() == MouseModes.scroll) {
       factor *= 20; //TODO: FIX
       const midSect = 1/8;
       midSectTop = midHoriz - (midSect*resolution.height*0.5);
