@@ -13,7 +13,10 @@ import "./styles.css";
 import * as controller from "../../modules/controller/controller_pref";
 import preferencesJSON from "../../utils/preferences/preferences.json";
 
-class EnableButtons extends React.Component{
+let io = require('socket.io-client')
+let socket = io("http://localhost:6767");
+
+class EnableButtons extends React.Component {
 
   state = {
     isMicOn: true,
@@ -33,10 +36,11 @@ class EnableButtons extends React.Component{
     controller.setTrackBool(!this.state.isWebcamOn);
   };
 
-
-  onMicrophoneButtonClicked = () => {
-    this.setState({ isMicOn: !this.state.isMicOn});
-  };
+    onMicrophoneButtonClicked = () => {
+        socket.emit('microphone', !this.state.isMicOn, () => {
+            this.setState({isMicOn: !this.state.isMicOn});
+        });
+    };
 
   renderMicrophoneButton = () => (
     <FlatButton

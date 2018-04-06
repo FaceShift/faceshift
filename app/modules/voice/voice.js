@@ -1,28 +1,33 @@
-let fs = require("fs");
-
 let training = require("./training");
 let snowboy = require("./snowboy");
 
-const FACESHIFT_COMMAND = "faceshift";
-const PAUSE_COMMAND_KEY = "pause";
-const RESUME_COMMAND_KEY = "resume";
-const SCROLL_COMMAND_KEY = "scroll";
-const MOUSE_COMMAND_KEY = "mouse";
-
 const COMMANDS = {
-    pause: "face shift pause",
-    resume: "face shift resume",
-    scroll: "face shift scroll",
-    mouse: "face shift mouse"
+    switch: "face shift switch mode",
+    toggle: "face shift toggle tracking"
+};
+const COMMAND_COUNT = Object.keys(COMMANDS).length;
+
+const start = () => {
+    trainVoiceModel();
 };
 
-const start = async () => {
-    console.log("Starting Voice");
-    let untrained = training.indentifyUntrainedCommands(COMMANDS);
+const stop = () => {
+    snowboy.stopDetecting();
+};
+
+const retrainVoiceModel = () => {
+    stop();
+    let untrained = training.identifyUntrainedCommands(COMMANDS);
+    if (COMMAND_COUNT - untrained.length === COMMAND_COUNT) {
+        training.deleteVoiceModels();
+    }
+    start();
+}
+
+const trainVoiceModel = async () => {
+    let untrained = training.identifyUntrainedCommands(COMMANDS);
+    let modelCount = COMMAND_COUNT - untrained.length;
     let voiceSamples = await training.recordCommands(untrained, COMMANDS);
-    let modelCount = Object.keys(COMMANDS).length - untrained.length;
-    console.log('Initial Model Count', modelCount);
-    console.table(voiceSamples);
     Object.keys(voiceSamples).map(
         voiceSample => {
             training.requestVoiceModels(voiceSample, COMMANDS[voiceSample], voiceSamples[voiceSample], () => {
@@ -30,24 +35,14 @@ const start = async () => {
             });
         }
     )
-    // voiceSamples.forEach((voiceSample, commandName) => {
-    //   training.requestVoiceModels(commandName, COMMANDS[commandName], voiceSample, () => {
-    //     modelCount++
-    //   });
-    // });
+
     let interval = setInterval(() => {
-        console.log('Commands Size', Object.keys(COMMANDS).length)
-        console.log('Model Count', modelCount)
-        if (modelCount === Object.keys(COMMANDS).length) {
+        if (modelCount === COMMAND_COUNT) {
             _detection();
             clearInterval(interval)
         }
     }, 1000);
-};
-
-const stop = () => {
-    snowboy.stopDetecting();
-};
+}
 
 let _detection = () => {
     snowboy.loadModels(training.voiceModelsPath);
@@ -56,5 +51,6 @@ let _detection = () => {
 
 module.exports = {
     start,
-    stop
+    stop,
+    retrainVoiceModel
 };

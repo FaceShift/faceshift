@@ -18,7 +18,6 @@ function loadModels(voiceModelsDirectory) {
     })
 }
 
-var silenceCount = 0;
 
 function startDetecting(voiceModelsDirectory) {
     console.log('Listening!')
@@ -29,12 +28,11 @@ function startDetecting(voiceModelsDirectory) {
     });
 
     detector.on('silence', function () {
-        console.log('silence', silenceCount)
-        silenceCount++
+
     });
 
     detector.on('sound', function (buffer) {
-        console.log('sound')
+
     });
 
     detector.on('error', function () {
@@ -42,7 +40,7 @@ function startDetecting(voiceModelsDirectory) {
     });
 
     detector.on('hotword', function (index, hotword, buffer) {
-        console.log('raw', hotword);
+        console.log('hotword', hotword);
     });
 
     const mic = record.start({
@@ -53,8 +51,9 @@ function startDetecting(voiceModelsDirectory) {
     mic.pipe(detector);
 }
 
-function stopDetecting() {
-    console.log("TODO: Stop listening")
+let stopDetecting = () => {
+    record.stop();
+    console.log("Stopped listening")
 }
 
 module.exports = {

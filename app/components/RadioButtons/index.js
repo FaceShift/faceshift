@@ -11,7 +11,7 @@ const styles = {
   },
 };
 
-class RadioButtons extends React.Component {
+class RadioButtons extends React.Component{
 
   static propTypes = {
     options: PropTypes.array,

@@ -14,6 +14,9 @@ import {Card, CardText} from "material-ui/Card";
 import preferencesJSON from "../../utils/preferences/preferences.json";
 import controller from "../../modules/controller/controller_pref";
 
+let io = require('socket.io-client')
+let socket = io("http://localhost:6767");
+
 class Settings extends React.Component {
 
   state = {
@@ -173,6 +176,7 @@ class Settings extends React.Component {
   renderSensitivitySlider = () => <BasicSlider
     currentValue={this.state.sensitivityValue}
     onChange={this.onSensitivityChanged}/>;
+
 
   render() {
     return this.renderNewSettings();

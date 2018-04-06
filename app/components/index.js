@@ -4,9 +4,9 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import App from "./App/index";
 
 const MaterialApp = () => (
-  <MuiThemeProvider>
-    <App/>
-  </MuiThemeProvider>
+    <MuiThemeProvider>
+        <App/>
+    </MuiThemeProvider>
 );
 
 // for hot reloading

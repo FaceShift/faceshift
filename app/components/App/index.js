@@ -6,21 +6,21 @@ import "./styles.css";
 
 class Home extends React.Component {
 
-  renderSettings = () => <Settings/>;
+    renderSettings = () => <Settings/>;
 
-  renderMainButtons = () => <EnableButtons/>;
+    renderMainButtons = () => <EnableButtons/>;
 
-  render() {
-    return (
-      <div>
-        <div className="mainButtonContainer">
-          {this.renderMainButtons()}
-        </div>
-        <Divider/>
-        {this.renderSettings()}
-      </div>
-    );
-  }
+    render() {
+        return (
+            <div>
+                <div className="mainButtonContainer">
+                    {this.renderMainButtons()}
+                </div>
+                <Divider/>
+                {this.renderSettings()}
+            </div>
+        );
+    }
 }
 
 export default Home;
