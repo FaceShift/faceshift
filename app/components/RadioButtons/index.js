@@ -11,7 +11,7 @@ const styles = {
   },
 };
 
-class RadioButtons extends React.Component{
+class RadioButtons extends React.Component {
 
   static propTypes = {
     options: PropTypes.array,
@@ -29,7 +29,6 @@ class RadioButtons extends React.Component{
   renderOptions = () => (
     this.props.options.map(
       (option) => {
-        console.log("value is", option.value);
         return <RadioButton label={option.label} styles={styles.radioButton} value={option.value} key={option.label}
                             onClick={() => this.props.onClick(option.value)}/>
       }

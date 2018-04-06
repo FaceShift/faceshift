@@ -24,7 +24,6 @@ class EnableButtons extends React.Component {
   };
 
   componentWillMount(){
-
       socket.on("hotword", (hotword) => {
           this.onHotwordReceived(hotword);
       });
@@ -39,11 +38,10 @@ class EnableButtons extends React.Component {
     onHotwordReceived = (hotword) => {
         switch (hotword){
             case "toggle":
-                console.log("Toggle");
                 this.onCameraButtonClicked();
                 break;
             case "switch":
-                console.log("Switch");
+                this.onRadioButtonToggle();
                 break;
             default:
                 break;
@@ -55,7 +53,27 @@ class EnableButtons extends React.Component {
       this.setState({ isWebcamOn: !this.state.isWebcamOn});
   };
 
-    onMicrophoneButtonClicked = () => {
+  onRadioButtonToggle = () => {
+    const currentMode = this.state.modeValue;
+    switch (currentMode){
+      case MouseModes.scroll:
+        controller.enterDragMode();
+        this.setState({ modeValue: MouseModes.drag});
+        break;
+      case MouseModes.mouse:
+        controller.enterScrollMode();
+        this.setState({ modeValue: MouseModes.scroll});
+        break;
+      case MouseModes.drag:
+        controller.enterMouseMode();
+        this.setState({ modeValue: MouseModes.mouse});
+        break;
+      default:
+        break;
+    }
+  };
+
+  onMicrophoneButtonClicked = () => {
         socket.emit('microphone', !this.state.isMicOn, () => {
             this.setState({isMicOn: !this.state.isMicOn});
         });
@@ -80,12 +98,15 @@ class EnableButtons extends React.Component {
     switch (value){
       case MouseModes.drag:
         controller.enterDragMode();
+        this.setState({ modeValue: MouseModes.drag});
         break;
       case MouseModes.mouse:
         controller.enterMouseMode();
+        this.setState({ modeValue: MouseModes.mouse});
         break;
       case MouseModes.scroll:
         controller.enterScrollMode();
+        this.setState({ modeValue: MouseModes.scroll});
         break;
       default:
         break;
@@ -97,6 +118,7 @@ class EnableButtons extends React.Component {
   );
 
   render(){
+    console.log("New Mode value is", this.state.modeValue);
     return(
       <div className="container">
         <div className="toggleButton">
