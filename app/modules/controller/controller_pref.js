@@ -35,7 +35,10 @@ const setRightClick = (trigger) => {
 
 const setTrackBool = (bool) => {
   track = bool;
-  console.log("new bool: " + track);
+}
+
+const setSensitivity = (number) => {
+  updatePreference("sensitivity", number);
 }
 
 /////////////////////
@@ -64,4 +67,5 @@ module.exports = { updatePreference,
                     setLeftClick, setRightClick,              
                     getLeftClick, getRightClick,
                     setTrackBool, 
-                    getTrackBool };
+                    getTrackBool,
+                    setSensitivity };
