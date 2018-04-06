@@ -12,6 +12,7 @@ import MenuItem from "material-ui/MenuItem";
 import {Card, CardText} from "material-ui/Card";
 
 import preferencesJSON from "../../utils/preferences/preferences.json";
+import * as controller from "../../modules/controller/controller_pref";
 
 class Settings extends React.Component {
 
@@ -45,16 +46,13 @@ class Settings extends React.Component {
   };
 
   onSensitivityChanged = (newValue) => {
+    controller.setSensitivity(newValue);
     this.setState({sensitivityValue: newValue, isSettingsChanged: true})
-  };
-
-  onSaveClicked = () => {
-
   };
 
   renderSlider = () => (
     <div>
-      <Slider/>
+      <Slider defaultValue={this.state.sensitivityValue} onChange={(event, newValue) => this.onSensitivityChanged(newValue)}/>
     </div>
   );
 
@@ -69,13 +67,8 @@ class Settings extends React.Component {
   };
 
   renderDropdownOptions = () => this.gesturesToArray(InputOptions).map(
-    (gesture, index) => <MenuItem value={gesture} primaryText={gesture}/>);
+    (gesture) => <MenuItem value={gesture} primaryText={gesture}/>);
 
-  renderSaveButton = () => (
-    <div>
-      <FlatButton label="Save" disabled={!this.state.didSettingChange && !this.isDropdownSettingValid()}/>
-    </div>
-  );
 
   //Options cannot share the same gestures
 
@@ -88,7 +81,6 @@ class Settings extends React.Component {
     <div>
       <SelectField floatingLabelText="Right Click" value={this.state.rightClickValue}
                    onChange={(event, index, value) => this.setState({rightClickValue: value, didSettingChange: true})}>
-        {console.log("right click value", this.state.rightClickValue)}
         {this.renderDropdownOptions()}
       </SelectField>
     </div>
@@ -98,7 +90,6 @@ class Settings extends React.Component {
     <div>
       <SelectField floatingLabelText="Left Click" value={this.state.leftClickValue}
                    onChange={(event, index, value) => this.setState({leftClickValue: value, didSettingChange: true})}>
-        {console.log("left click value", this.state.leftClickValue)}
         {this.renderDropdownOptions()}
       </SelectField>
     </div>
@@ -108,7 +99,6 @@ class Settings extends React.Component {
     <div>
       <Card>
         <CardText>
-          {this.renderSaveButton()}
           {this.renderErrorMessage()}
           {this.renderRightClick()}
           {this.renderLeftClick()}
@@ -171,18 +161,7 @@ class Settings extends React.Component {
     onChange={this.onSensitivityChanged}/>;
 
   render() {
-    console.log("state", this.state);
-    console.log(this.gesturesToArray(InputOptions));
     return this.renderNewSettings();
-    return (
-      <div>
-        {this.renderSettingsButton()}
-        {this.renderRightMouseClickDropDown()}
-        {this.renderLeftMouseClickDropDown()}
-        {this.renderDoubleClickDropDown()}
-        {this.renderSensitivitySlider()}
-      </div>
-    )
   }
 }
 
