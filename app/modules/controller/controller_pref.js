@@ -9,35 +9,35 @@ global.track = true;
 /////////////////////
 
 const updatePreference = (key, val) => {
-  preferences.updatePreference(key, val);
+    preferences.updatePreference(key, val);
 }
 
 const enterMouseMode = () => {
-  updatePreference("mode", MouseModes.mouse);
+    updatePreference("mode", MouseModes.mouse);
 }
 
 const enterScrollMode = () => {
-  updatePreference("mode", MouseModes.scroll);
+    updatePreference("mode", MouseModes.scroll);
 }
 
 const enterDragMode = () => {
-  updatePreference("mode", MouseModes.drag);
+    updatePreference("mode", MouseModes.drag);
 }
 
 const setLeftClick = (trigger) => {
-  updatePreference("left-click", trigger);
+    updatePreference("left-click", trigger);
 }
 
 const setRightClick = (trigger) => {
-  updatePreference("right-click", trigger);
+    updatePreference("right-click", trigger);
 }
 
 const setTrackBool = (bool) => {
-  track = bool;
+    track = bool;
 }
 
 const setSensitivity = (number) => {
-  updatePreference("sensitivity", number);
+    updatePreference("sensitivity", number);
 }
 
 /////////////////////
@@ -45,26 +45,28 @@ const setSensitivity = (number) => {
 /////////////////////
 
 const getMode = () => {
-  return preferences.getMode();
+    return preferences.getMode();
 }
 
 const getLeftClick = () => {
-  return preferences.getLeftClick();
+    return preferences.getLeftClick();
 }
 
 const getRightClick = () => {
-  return preferences.getRightClick();
+    return preferences.getRightClick();
 }
 
 const getTrackBool = () => {
-  return global.track;
+    return global.track;
 }
 
-module.exports = { updatePreference,
-                    enterMouseMode, enterScrollMode, enterDragMode, 
-                    getMode,
-                    setLeftClick, setRightClick,              
-                    getLeftClick, getRightClick,
-                    setTrackBool, 
-                    getTrackBool,
-                    setSensitivity };
+module.exports = {
+    updatePreference,
+    enterMouseMode, enterScrollMode, enterDragMode,
+    getMode,
+    setLeftClick, setRightClick,
+    getLeftClick, getRightClick,
+    setTrackBool,
+    getTrackBool,
+    setSensitivity
+};

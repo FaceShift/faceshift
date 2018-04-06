@@ -1,12 +1,12 @@
 import React from "react";
 
 import DropDown from "../DropDown/index";
-import {Gestures, InputOptions} from "../../utils/constants/constants";
+import {InputOptions} from "../../utils/constants/constants";
 import BasicSlider from "../Slider";
 import RaisedButton from "material-ui/RaisedButton";
 import Slider from "material-ui/Slider";
 
-import {Tabs, Tab} from "material-ui/Tabs";
+import {Tab, Tabs} from "material-ui/Tabs";
 import SelectField from "material-ui/SelectField";
 import MenuItem from "material-ui/MenuItem";
 import {Card, CardText} from "material-ui/Card";
@@ -23,28 +23,6 @@ class Settings extends React.Component {
         didSettingChange: false,
         textToDisplay: "Voice Model untrained",
     };
-
-    componentWillMount() {
-
-        socket.on("message", (message) => {
-            this.setState({textToDisplay: message});
-        });
-
-        socket.emit("lastMessage", "message");
-
-        const preferences = JSON.parse(preferencesJSON);
-        const rightClickValue = preferences["right-click"];
-        const leftClickValue = preferences["left-click"];
-        const sensitivity = preferences["sensitivity"];
-
-        this.setState({
-            sensitivityValue: sensitivity,
-            rightClickValue: rightClickValue,
-            leftClickValue: leftClickValue,
-            doubleClickValue: 2,
-        })
-    }
-
     gesturesToArray = (gestures) => {
         const gestureArray = [];
         Object.keys(gestures).forEach(
@@ -54,18 +32,16 @@ class Settings extends React.Component {
         );
         return gestureArray;
     };
-
     onSensitivityChanged = (newValue) => {
         controller.setSensitivity(newValue);
         this.setState({sensitivityValue: newValue, isSettingsChanged: true})
     };
-
     renderSlider = () => (
         <div>
-            <Slider defaultValue={this.state.sensitivityValue} onChange={(event, newValue) => this.onSensitivityChanged(newValue)}/>
+            <Slider defaultValue={this.state.sensitivityValue}
+                    onChange={(event, newValue) => this.onSensitivityChanged(newValue)}/>
         </div>
     );
-
     /*******************************************************************************
      * START OF THE NEW SETTINGS PAGE
      *******************************************************************************/
@@ -75,28 +51,23 @@ class Settings extends React.Component {
         const allSettings = [this.state.rightClickValue, this.state.doubleClickValue, this.state.leftClickValue];
         return new Set(allSettings).size === allSettings.length;
     };
-
     renderDropdownOptions = () => this.gesturesToArray(InputOptions).map(
-        (gesture) => <MenuItem key={`${gesture}${new Date()}`}value={gesture} primaryText={gesture}/>);
-
+        (gesture) => <MenuItem key={`${gesture}${new Date()}`} value={gesture} primaryText={gesture}/>);
     renderErrorMessage = () => {
         return this.isDropdownSettingValid() ?
             <div/> : <Card><CardText>You cannot pick the same gestures</CardText></Card>
     };
-
     onRightClickChange = (event, index, value) => {
         this.setState({rightClickValue: value, didSettingsChange: true}, () => {
             this.isDropdownSettingValid() ? controller.setRightClick(value) : ""
         });
     };
-
     onLeftClickChange = (event, index, value) => {
         this.setState({leftClickValue: value, didSettingsChange: true}, () => {
             this.isDropdownSettingValid() ? controller.setLeftClick(value) : ""
 
         });
     };
-
     renderRightClick = () => (
         <div>
             <SelectField floatingLabelText="Right Click" value={this.state.rightClickValue}
@@ -105,7 +76,6 @@ class Settings extends React.Component {
             </SelectField>
         </div>
     );
-
     renderLeftClick = () => (
         <div>
             <SelectField floatingLabelText="Left Click" value={this.state.leftClickValue}
@@ -114,7 +84,6 @@ class Settings extends React.Component {
             </SelectField>
         </div>
     );
-
     renderDropDowns = () => (
         <div>
             <Card>
@@ -127,7 +96,6 @@ class Settings extends React.Component {
             </Card>
         </div>
     );
-
     renderTrainVoiceModel = () => (
         <div>
             <Card>
@@ -140,7 +108,6 @@ class Settings extends React.Component {
             </Card>
         </div>
     );
-
     renderNewSettings = () => (
         <div>
             <Tabs>
@@ -179,10 +146,30 @@ class Settings extends React.Component {
         currentValue={this.state.sensitivityValue}
         onChange={this.onSensitivityChanged}/>;
 
+    componentWillMount() {
 
-  render() {
-    return this.renderNewSettings();
-  }
+        socket.on("message", (message) => {
+            this.setState({textToDisplay: message});
+        });
+
+        socket.emit("lastMessage", "message");
+
+        const preferences = JSON.parse(preferencesJSON);
+        const rightClickValue = preferences["right-click"];
+        const leftClickValue = preferences["left-click"];
+        const sensitivity = preferences["sensitivity"];
+
+        this.setState({
+            sensitivityValue: sensitivity,
+            rightClickValue: rightClickValue,
+            leftClickValue: leftClickValue,
+            doubleClickValue: 2,
+        })
+    }
+
+    render() {
+        return this.renderNewSettings();
+    }
 }
 
 export default Settings;
