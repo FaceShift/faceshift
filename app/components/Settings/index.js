@@ -77,10 +77,24 @@ class Settings extends React.Component {
       <div/> : <Card><CardText>Options cannot share the same gestures</CardText></Card>
   };
 
+  onRightClickChange = (event, index, value) => {
+    this.setState({rightClickValue: value, didSettingsChange: true}, () => {
+      this.isDropdownSettingValid() ? controller.setRightClick(value) : ""
+    });
+  };
+
+  onLeftClickChange = (event, index, value) => {
+    this.setState({leftClickValue: value, didSettingsChange: true}, () => {
+        this.isDropdownSettingValid() ? controller.setLeftClick(value) : ""
+
+    });
+  };
+
+
   renderRightClick = () => (
     <div>
       <SelectField floatingLabelText="Right Click" value={this.state.rightClickValue}
-                   onChange={(event, index, value) => this.setState({rightClickValue: value, didSettingChange: true})}>
+                   onChange={this.onRightClickChange}>
         {this.renderDropdownOptions()}
       </SelectField>
     </div>
@@ -89,7 +103,7 @@ class Settings extends React.Component {
   renderLeftClick = () => (
     <div>
       <SelectField floatingLabelText="Left Click" value={this.state.leftClickValue}
-                   onChange={(event, index, value) => this.setState({leftClickValue: value, didSettingChange: true})}>
+                   onChange={this.onLeftClickChange}>
         {this.renderDropdownOptions()}
       </SelectField>
     </div>
