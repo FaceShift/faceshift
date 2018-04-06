@@ -1,7 +1,7 @@
 import React from "react";
 
 import DropDown from "../DropDown/index";
-import {Gestures} from "../../utils/constants/constants";
+import {Gestures, inputOptions} from "../../utils/constants/constants";
 import BasicSlider from "../Slider";
 import FlatButton from "material-ui/FlatButton";
 import Divider from "material-ui/Divider";
@@ -10,8 +10,7 @@ import Slider from "material-ui/Slider";
 import {Tabs, Tab} from "material-ui/Tabs";
 import SelectField from "material-ui/SelectField";
 import MenuItem from "material-ui/MenuItem";
-import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from "material-ui/Card";
-
+import {Card, CardText} from "material-ui/Card";
 
 import preferencesJSON from "../../utils/preferences/preferences.json";
 
@@ -25,11 +24,22 @@ class Settings extends React.Component {
     didSettingChange: false,
   };
 
-  gesturesToArray = () => {
+  componentWillMount() {
+    const preferences = JSON.parse(preferencesJSON);
+    const preferencesArray = this.gesturesToArray(preferences);
+    const rightClickValue = preferences["right-click"];
+    const leftClickValue = preferences["left-click"];
+    const modeValue = preferences["mode"];
+
+    console.log(rightClickValue, leftClickValue, modeValue);
+    console.log("preferences", preferencesArray);
+  }
+
+  gesturesToArray = (gestures) => {
     const gestureArray = [];
-    Object.keys(Gestures).forEach(
+    Object.keys(gestures).forEach(
       gesture => {
-        gestureArray.push(Gestures[gesture])
+        gestureArray.push(gestures[gesture])
       }
     );
     return gestureArray;
@@ -59,9 +69,8 @@ class Settings extends React.Component {
     return new Set(allSettings).size === allSettings.length;
   };
 
-  renderDropdownOptions = () => this.gesturesToArray().map(
-    (gesture, index) => <MenuItem value={index} primaryText={gesture}/>
-  );
+  renderDropdownOptions = () => Object.keys(inputOptions).forEach(
+    (gesture, index) => <MenuItem value={index} primaryText={gesture}/>);
 
   renderSaveButton = () => (
     <div>
@@ -114,7 +123,7 @@ class Settings extends React.Component {
           {this.renderDoubleClick()}
         </CardText>
       </Card>
-      </div>
+    </div>
   );
 
   renderTrainVoiceModel = () => (
@@ -155,16 +164,15 @@ class Settings extends React.Component {
   );
 
   renderRightMouseClickDropDown = () => (<DropDown value={0} label="Right Mouse Click"
-                                                   options={this.gesturesToArray()}
+                                                   options={this.gesturesToArray(Gestures)}
   />);
 
   renderLeftMouseClickDropDown = () => (<DropDown value={1} label="Left Mouse Click"
-                                                  options={this.gesturesToArray()}
+                                                  options={this.gesturesToArray(Gestures)}
   />);
 
   renderDoubleClickDropDown = () => (<DropDown value={2} label="Double Click"
-                                               options={this.gesturesToArray()}
-  />);
+                                               options={this.gesturesToArray(Gestures)}/>);
 
   renderSensitivitySlider = () => <BasicSlider
     currentValue={this.state.sensitivityValue}

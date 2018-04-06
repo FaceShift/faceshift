@@ -1,9 +1,14 @@
  const Gestures = Object.freeze({
   RIGHT_EYE_WINK: "Right Eye Wink",
   LEFT_EYE_WINK: "Left Eye Wink",
-  BLINK: "Blink",
+  MOUTH: "Mouth",
 });
 
+const inputOptions = Object.freeze({
+  leftBlink: "left-blink",
+  rightBlink: "right-blink",
+  mouth: "mouth",
+});
 
 const Modes = Object.freeze([
   {
@@ -26,4 +31,4 @@ const MouseModes = Object.freeze({
   drag: "drag"
 });
 
-module.exports = {Modes, Gestures, MouseModes};
+module.exports = {Modes, Gestures, MouseModes, inputOptions};
