@@ -12,7 +12,6 @@ import MenuItem from "material-ui/MenuItem";
 import {Card, CardText} from "material-ui/Card";
 
 import preferencesJSON from "../../utils/preferences/preferences.json";
-import * as controller from "../../modules/controller/controller_pref";
 
 class Settings extends React.Component {
 

@@ -38,10 +38,6 @@ const setTrackBool = (bool) => {
   console.log("new bool: " + track);
 }
 
-const setSensitivity = (number) => {
-  updatePreference("sensitivity", number);
-};
-
 /////////////////////
 // Getters
 /////////////////////
@@ -62,13 +58,10 @@ const getTrackBool = () => {
   return global.track;
 }
 
-module.exports = {
-  updatePreference,
-  enterMouseMode, enterScrollMode, enterDragMode,
-  getMode,
-  setLeftClick, setRightClick,
-  getLeftClick, getRightClick,
-  setTrackBool,
-  getTrackBool,
-  setSensitivity
-};
+module.exports = { updatePreference,
+                    enterMouseMode, enterScrollMode, enterDragMode, 
+                    getMode,
+                    setLeftClick, setRightClick,              
+                    getLeftClick, getRightClick,
+                    setTrackBool, 
+                    getTrackBool };
