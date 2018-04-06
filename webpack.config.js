@@ -1,4 +1,6 @@
 const webpack = require("webpack");
+var WatchIgnorePlugin = require('watch-ignore-webpack-plugin');
+const path = require("path");
 
 module.exports = {
     entry: {
@@ -37,22 +39,25 @@ module.exports = {
         net: "empty",
         tls: "empty"
     },
-    plugins: [
-        new webpack.HotModuleReplacementPlugin(),
-        new webpack.IgnorePlugin(new RegExp("^(ipc)$")),
-        new webpack.ExternalsPlugin('commonjs', [
-            'fs',
-            'desktop-capturer',
-            'electron',
-            'ipc-main',
-            'ipc-renderer',
-            'native-image',
-            'remote',
-            'web-frame',
-            'clipboard',
-            'crash-reporter',
-            'screen',
-            'shell'
-        ])
-    ]
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.IgnorePlugin(new RegExp("^(ipc)$")),
+    new webpack.ExternalsPlugin('commonjs', [
+      'fs',
+      'desktop-capturer',
+      'electron',
+      'ipc-main',
+      'ipc-renderer',
+      'native-image',
+      'remote',
+      'web-frame',
+      'clipboard',
+      'crash-reporter',
+      'screen',
+      'shell'
+    ]),
+    new WatchIgnorePlugin([
+      path.resolve(__dirname, './app/utils/preferences/preferences.json'),
+  ]),
+  ]
 };

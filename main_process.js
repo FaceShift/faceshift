@@ -27,8 +27,8 @@ function createWindow() {
         slashes: true,
     }));
 
-    // Open the DevTools.
-    mainWindow.webContents.openDevTools();
+  // Open the DevTools.
+  mainWindow.webContents.openDevTools();
 
     mainWindow.setAlwaysOnTop(true, "floating");
     mainWindow.setVisibleOnAllWorkspaces(true);

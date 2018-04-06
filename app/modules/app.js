@@ -1,6 +1,6 @@
 let webcam = require("../app/modules/webcam/webcam");
 let trackerSetup = require("../app/modules/tracking/setup");
-let preferences = require("../app/preferences/preferences");
+let preferences = require("../app/utils/preferences/preferences");
 
 // Voice
 let voice = require("../app/modules/voice/voice");

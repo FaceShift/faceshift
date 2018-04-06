@@ -7,24 +7,34 @@ import WebcamOnIcon from "material-ui/svg-icons/av/videocam";
 import WebcamOffIcon from "material-ui/svg-icons/av/videocam-off"
 import RadioButtons from "../RadioButtons";
 
-import {Modes} from "../../utils/constants/constants";
+import { Modes, MouseModes } from "../../utils/constants/constants";
 import "./styles.css";
+
 import * as controller from "../../modules/controller/controller_pref";
+import preferencesJSON from "../../utils/preferences/preferences.json";
 
 let io = require('socket.io-client')
 let socket = io("http://localhost:6767");
 
 class EnableButtons extends React.Component {
 
-    state = {
-        isMicOn: true,
-        isWebcamOn: true,
-    };
+  state = {
+    isMicOn: true,
+    isWebcamOn: true,
+  };
 
-    onCameraButtonClicked = () => {
-        this.setState({isWebcamOn: !this.state.isWebcamOn});
-        controller.setTrackBool(!this.state.isWebcamOn);
-    };
+  componentWillMount(){
+    const preferences = JSON.parse(preferencesJSON);
+    const modeValue = preferences["mode"];
+    this.setState({
+      modeValue: modeValue,
+    })
+  }
+
+  onCameraButtonClicked = () => {
+    this.setState({ isWebcamOn: !this.state.isWebcamOn});
+    controller.setTrackBool(!this.state.isWebcamOn);
+  };
 
     onMicrophoneButtonClicked = () => {
         socket.emit('microphone', !this.state.isMicOn, () => {
@@ -32,43 +42,60 @@ class EnableButtons extends React.Component {
         });
     };
 
-    renderMicrophoneButton = () => (
-        <FlatButton
-            icon={this.state.isMicOn ? <MicOnIcon/> : <MicOffIcon/>}
-            onClick={this.onMicrophoneButtonClicked}
-        />
-    );
+  renderMicrophoneButton = () => (
+    <FlatButton
+      icon={this.state.isMicOn ? <MicOnIcon/> : <MicOffIcon/>}
+      onClick={this.onMicrophoneButtonClicked}
+    />
+  );
 
-    renderCameraButton = () => (
-        <FlatButton
-            icon={this.state.isWebcamOn ? <WebcamOnIcon/> : <WebcamOffIcon/>}
-            onClick={this.onCameraButtonClicked}
-        />
-    );
+  renderCameraButton = () => (
+    <FlatButton
+      icon={this.state.isWebcamOn ? <WebcamOnIcon/> : <WebcamOffIcon/>}
+      onClick={this.onCameraButtonClicked}
+    />
+  );
 
-    renderMouseModeButton = () => (
-        <RadioButtons options={Modes} name="Mouse Modes"/>
-    );
-
-    render() {
-        return (
-            <div className="container">
-                <div className="toggleButton">
-                    <div>
-                        {this.renderMicrophoneButton()}
-                    </div>
-                    <div>
-                        {this.renderCameraButton()}
-                    </div>
-                </div>
-                <div>
-                    <div style={{width: 200}}>
-                        {this.renderMouseModeButton()}
-                    </div>
-                </div>
-            </div>
-        )
+  onRadioButtonClick = (value) => {
+    console.log("Switched mode to ", value);
+    switch (value){
+      case MouseModes.drag:
+        controller.enterDragMode();
+        break;
+      case MouseModes.mouse:
+        controller.enterMouseMode();
+        break;
+      case MouseModes.scroll:
+        controller.enterScrollMode();
+        break;
+      default:
+        break;
     }
+  };
+
+  renderMouseModeButton = () => (
+    <RadioButtons options={Modes} name="Mouse Modes" onClick={this.onRadioButtonClick} defaultSelected={this.state.modeValue}/>
+  );
+
+  render(){
+    return(
+      <div className="container">
+        <div className="toggleButton">
+          <div>
+            {this.renderMicrophoneButton()}
+          </div>
+          <div>
+            {this.renderCameraButton()}
+          </div>
+        </div>
+        <div>
+          <div style={{ width: 200}}>
+            {this.renderMouseModeButton()}
+          </div>
+        </div>
+      </div>
+    )
+  }
 }
 
 export default EnableButtons;
