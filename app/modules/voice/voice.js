@@ -10,7 +10,11 @@ const COMMAND_COUNT = Object.keys(COMMANDS).length;
 let lastMessage = "Voice Model Is Untrained";
 
 let messageCallback = (message) => {
-    console.log(message);
+    console.log("default", message);
+};
+
+let hotwordCallback = (hotword) => {
+    console.log("default", hotword);
 };
 
 let start = () => {
@@ -71,6 +75,10 @@ let setMessageCallback = (newMessageCallback) => {
     messageCallback = newMessageCallback;
 }
 
+let setHotwordCallback = (newHotwordCallback) => {
+    hotwordCallback = newHotwordCallback;
+}
+
 let sendMessageToMessageCallback = (message) => {
     lastMessage = message;
     messageCallback(lastMessage);
@@ -82,7 +90,7 @@ let getLastMessage = () => {
 
 let _startDetecting = () => {
     snowboy.loadModels(training.voiceModelsPath);
-    snowboy.startDetecting(training.voiceModelsPath);
+    snowboy.startDetecting(training.voiceModelsPath, hotwordCallback);
 };
 
 module.exports = {
@@ -90,5 +98,6 @@ module.exports = {
     stop,
     retrainVoiceModel,
     setMessageCallback,
-    getLastMessage
+    setHotwordCallback,
+    getLastMessage,
 };

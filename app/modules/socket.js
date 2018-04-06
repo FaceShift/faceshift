@@ -25,7 +25,12 @@ let sendMessage = (message) => {
     io.emit("message", message);
 };
 
+let sendHotword = (hotword) => {
+    io.emit("hotword", hotword);
+}
+
 module.exports = {
     createSocketServer,
-    sendMessage
+    sendMessage,
+    sendHotword
 };

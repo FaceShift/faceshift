@@ -8,7 +8,6 @@ global.track = true;
 // Setters
 /////////////////////
 
-//TODO: Do these get called from snowboy.js?????
 const updatePreference = (key, val) => {
   preferences.updatePreference(key, val);
 }

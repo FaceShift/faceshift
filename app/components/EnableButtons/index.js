@@ -13,7 +13,7 @@ import "./styles.css";
 import * as controller from "../../modules/controller/controller_pref";
 import preferencesJSON from "../../utils/preferences/preferences.json";
 
-let io = require('socket.io-client')
+let io = require('socket.io-client');
 let socket = io("http://localhost:6767");
 
 class EnableButtons extends React.Component {
@@ -24,6 +24,11 @@ class EnableButtons extends React.Component {
   };
 
   componentWillMount(){
+
+      socket.on("hotword", (hotword) => {
+          this.onHotwordReceived(hotword);
+      });
+
     const preferences = JSON.parse(preferencesJSON);
     const modeValue = preferences["mode"];
     this.setState({
@@ -31,9 +36,23 @@ class EnableButtons extends React.Component {
     })
   }
 
+    onHotwordReceived = (hotword) => {
+        switch (hotword){
+            case "toggle":
+                console.log("Toggle");
+                this.onCameraButtonClicked();
+                break;
+            case "switch":
+                console.log("Switch");
+                break;
+            default:
+                break;
+        }
+    };
+
   onCameraButtonClicked = () => {
-    this.setState({ isWebcamOn: !this.state.isWebcamOn});
-    controller.setTrackBool(!this.state.isWebcamOn);
+      controller.setTrackBool(!this.state.isWebcamOn);
+      this.setState({ isWebcamOn: !this.state.isWebcamOn});
   };
 
     onMicrophoneButtonClicked = () => {

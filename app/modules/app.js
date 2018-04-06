@@ -19,6 +19,7 @@ let onMicStateChange = (micState) => {
 };
 
 voice.setMessageCallback(socket.sendMessage);
+voice.setHotwordCallback(socket.sendHotword);
 voice.start();
 socket.createSocketServer(onTraining, onMicStateChange, voice.getLastMessage());
 

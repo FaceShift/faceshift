@@ -2,7 +2,6 @@ const record = require('node-record-lpcm16');
 const fs = require('fs')
 const Detector = require('snowboy').Detector;
 const Models = require('snowboy').Models;
-
 const models = new Models();
 
 function loadModels(voiceModelsDirectory) {
@@ -19,7 +18,7 @@ function loadModels(voiceModelsDirectory) {
 }
 
 
-function startDetecting(voiceModelsDirectory) {
+function startDetecting(voiceModelsDirectory, hotwordCallback) {
     const detector = new Detector({
         resource: 'voice-models/common.res',
         models: models,
@@ -39,7 +38,8 @@ function startDetecting(voiceModelsDirectory) {
     });
 
     detector.on('hotword', function (index, hotword, buffer) {
-        console.log('hotword', hotword);
+        console.log("hotword", hotword);
+        hotwordCallback(hotword);
     });
 
     const mic = record.start({
