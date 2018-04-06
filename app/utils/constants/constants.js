@@ -5,9 +5,9 @@
 });
 
 const InputOptions = Object.freeze({
-  leftblink: "left-blink",
-  rightblink: "right-blink",
-  mouth: "mouth",
+  leftblink: "Left Blink",
+  rightblink: "Right Blink",
+  mouth: "Mouth Open",
 });
 
 const Modes = Object.freeze([

@@ -1,6 +1,5 @@
 import React from "react";
 import FlatButton from 'material-ui/FlatButton';
-import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 
 import MicOnIcon from "material-ui/svg-icons/av/mic";
 import MicOffIcon from "material-ui/svg-icons/av/mic-off";
@@ -9,11 +8,10 @@ import WebcamOffIcon from "material-ui/svg-icons/av/videocam-off"
 import RadioButtons from "../RadioButtons";
 
 import { Modes, MouseModes } from "../../utils/constants/constants";
-import "./styles.css"; 
-
-import webcam from "../../modules/webcam/webcam";
+import "./styles.css";
 
 import * as controller from "../../modules/controller/controller_pref";
+import preferencesJSON from "../../utils/preferences/preferences.json";
 
 class EnableButtons extends React.Component{
 
@@ -21,6 +19,14 @@ class EnableButtons extends React.Component{
     isMicOn: true,
     isWebcamOn: true,
   };
+
+  componentWillMount(){
+    const preferences = JSON.parse(preferencesJSON);
+    const modeValue = preferences["mode"];
+    this.setState({
+      modeValue: modeValue,
+    })
+  }
 
   onCameraButtonClicked = () => {
     this.setState({ isWebcamOn: !this.state.isWebcamOn});
@@ -64,10 +70,11 @@ class EnableButtons extends React.Component{
   };
 
   renderMouseModeButton = () => (
-    <RadioButtons options={Modes} name="Mouse Modes" onClick={this.onRadioButtonClick}/>
+    <RadioButtons options={Modes} name="Mouse Modes" onClick={this.onRadioButtonClick} defaultSelected={this.state.modeValue}/>
   );
 
   render(){
+    console.log("State in EnableButtons", this.state);
     return(
       <div className="container">
         <div className="toggleButton">

@@ -17,16 +17,19 @@ class RadioButtons extends React.Component {
     options: PropTypes.array,
     name: PropTypes.string,
     onClick: PropTypes.func,
+    defaultSelected: PropTypes.string,
   };
   static defaultProps = {
     options: [{value: "Left Mode"}],
     name: "Pick an option",
     onClick: () => {},
+    defaultSelected: "",
   };
 
   renderOptions = () => (
     this.props.options.map(
       (option) => {
+        console.log("value is", option.value);
         return <RadioButton label={option.label} styles={styles.radioButton} value={option.value} key={option.label}
                             onClick={() => this.props.onClick(option.value)}/>
       }
@@ -35,7 +38,7 @@ class RadioButtons extends React.Component {
 
   render() {
     return (
-      <RadioButtonGroup name={this.props.name} defaultSelected={this.props.options[0].value}>
+      <RadioButtonGroup name={this.props.name} defaultSelected={this.props.defaultSelected}>
         {this.renderOptions()}
       </RadioButtonGroup>
     )

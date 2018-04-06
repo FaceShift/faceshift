@@ -76,7 +76,6 @@ const processFaces = (brfManager, resolution, brfv4, imageDataCtx) => {
 
       //console.log(`${preferences.getLeftClick()}${preferences.getRightClick()}`);
       if ((`${preferences.getLeftClick()}${preferences.getRightClick()}`).includes("blink")) {
-        console.log("Yeah, it worked");
         //Click if user has blinked
         if (prevWholeFace != []) {
           let blinkRet = blink.blinked(prevWholeFace, face.vertices,

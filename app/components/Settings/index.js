@@ -1,10 +1,9 @@
 import React from "react";
 
 import DropDown from "../DropDown/index";
-import {Gestures, inputOptions} from "../../utils/constants/constants";
+import {Gestures, InputOptions} from "../../utils/constants/constants";
 import BasicSlider from "../Slider";
 import FlatButton from "material-ui/FlatButton";
-import Divider from "material-ui/Divider";
 import Slider from "material-ui/Slider";
 
 import {Tabs, Tab} from "material-ui/Tabs";
@@ -17,22 +16,22 @@ import preferencesJSON from "../../utils/preferences/preferences.json";
 class Settings extends React.Component {
 
   state = {
-    sensitivityValue: 0.5,
-    rightClickValue: 0,
-    leftClickValue: 1,
-    doubleClickValue: 2,
     didSettingChange: false,
   };
 
   componentWillMount() {
+
     const preferences = JSON.parse(preferencesJSON);
-    const preferencesArray = this.gesturesToArray(preferences);
     const rightClickValue = preferences["right-click"];
     const leftClickValue = preferences["left-click"];
-    const modeValue = preferences["mode"];
+    const sensitivity = preferences["sensitivity"];
 
-    console.log(rightClickValue, leftClickValue, modeValue);
-    console.log("preferences", preferencesArray);
+    this.setState({
+      sensitivityValue: sensitivity,
+      rightClickValue: rightClickValue,
+      leftClickValue: leftClickValue,
+      doubleClickValue: 2,
+    })
   }
 
   gesturesToArray = (gestures) => {
@@ -69,8 +68,8 @@ class Settings extends React.Component {
     return new Set(allSettings).size === allSettings.length;
   };
 
-  renderDropdownOptions = () => Object.keys(inputOptions).forEach(
-    (gesture, index) => <MenuItem value={index} primaryText={gesture}/>);
+  renderDropdownOptions = () => this.gesturesToArray(InputOptions).map(
+    (gesture, index) => <MenuItem value={gesture} primaryText={gesture}/>);
 
   renderSaveButton = () => (
     <div>
@@ -89,6 +88,7 @@ class Settings extends React.Component {
     <div>
       <SelectField floatingLabelText="Right Click" value={this.state.rightClickValue}
                    onChange={(event, index, value) => this.setState({rightClickValue: value, didSettingChange: true})}>
+        {console.log("right click value", this.state.rightClickValue)}
         {this.renderDropdownOptions()}
       </SelectField>
     </div>
@@ -98,15 +98,7 @@ class Settings extends React.Component {
     <div>
       <SelectField floatingLabelText="Left Click" value={this.state.leftClickValue}
                    onChange={(event, index, value) => this.setState({leftClickValue: value, didSettingChange: true})}>
-        {this.renderDropdownOptions()}
-      </SelectField>
-    </div>
-  );
-
-  renderDoubleClick = () => (
-    <div>
-      <SelectField floatingLabelText="Double Click" value={this.state.doubleClickValue}
-                   onChange={(event, index, value) => this.setState({doubleClickValue: value, didSettingChange: true})}>
+        {console.log("left click value", this.state.leftClickValue)}
         {this.renderDropdownOptions()}
       </SelectField>
     </div>
@@ -120,7 +112,7 @@ class Settings extends React.Component {
           {this.renderErrorMessage()}
           {this.renderRightClick()}
           {this.renderLeftClick()}
-          {this.renderDoubleClick()}
+          {this.renderSlider()}
         </CardText>
       </Card>
     </div>
@@ -179,6 +171,8 @@ class Settings extends React.Component {
     onChange={this.onSensitivityChanged}/>;
 
   render() {
+    console.log("state", this.state);
+    console.log(this.gesturesToArray(InputOptions));
     return this.renderNewSettings();
     return (
       <div>
