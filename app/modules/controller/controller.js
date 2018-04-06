@@ -3,7 +3,7 @@ const draw = require("../tracking/draw");
 const mouse = require("../peripheral/mouse");
 const blink = require("../tracking/blink");
 const mouth = require("../tracking/mouth");
-const preferences = require("../../preferences/preferences");
+const preferences = require("../../utils/preferences/preferences");
 
 //Used in point tracking
 let pointsToAdd = [];       //Used in tracking after face is lost
@@ -254,12 +254,10 @@ const moveMouse = (xy1/*Prev*/, xy2/*New*/, resolution, imageDataCtx) => {
       //*If nose is in the middle 1/8th of the screen, no scrolling.
       if (pt[1] > midSectBtm) {
         let percent = (pt[1]-midSectBtm)/(resolution.height - midSectBtm);
-        console.log(factor + " : " + percent + " : " + factor*percent);
         mouse.scrollUpDown(-factor*percent);
       }
       else if (pt[1] < midSectTop) {
         let percent = -(pt[1]-midSectTop)/(midSectTop);
-        console.log(factor + " : " + percent + " : " + factor*percent);
         mouse.scrollUpDown(factor*percent);
       }
     }

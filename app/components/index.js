@@ -9,4 +9,9 @@ const MaterialApp = () => (
   </MuiThemeProvider>
 );
 
+// for hot reloading
+if (module.hot) {
+  module.hot.accept();
+}
+
 ReactDOM.render(<MaterialApp/>, document.getElementById('content'));

@@ -1,4 +1,6 @@
 const webpack = require("webpack");
+var WatchIgnorePlugin = require('watch-ignore-webpack-plugin');
+const path = require("path");
 
 module.exports = {
   entry: {
@@ -49,6 +51,9 @@ module.exports = {
       'crash-reporter',
       'screen',
       'shell'
-    ])
+    ]),
+    new WatchIgnorePlugin([
+      path.resolve(__dirname, './app/utils/preferences/preferences.json'),
+  ]),
   ]
 };

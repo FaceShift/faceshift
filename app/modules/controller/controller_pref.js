@@ -1,4 +1,4 @@
-const preferences = require("../../preferences/preferences");
+const preferences = require("../../utils/preferences/preferences");
 const constants = require("../../utils/constants/constants");
 const MouseModes = constants.MouseModes;
 
