@@ -16,6 +16,8 @@ import webcam from "../../modules/webcam/webcam";
 let io = require('socket.io-client')
 let socket = io("http://localhost:6767");
 
+import * as controller from "../../modules/controller/controller_pref";
+
 class EnableButtons extends React.Component{
 
   state = {
@@ -25,6 +27,7 @@ class EnableButtons extends React.Component{
 
   onCameraButtonClicked = () => {
     this.setState({ isWebcamOn: !this.state.isWebcamOn});
+    controller.setTrackBool(!this.state.isWebcamOn);
   };
 
 
