@@ -11,7 +11,7 @@ const MaterialApp = () => (
 
 // for hot reloading
 if (module.hot) {
-  module.hot.accept();
+    module.hot.accept();
 }
 
 ReactDOM.render(<MaterialApp/>, document.getElementById('content'));
