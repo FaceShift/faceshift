@@ -81,14 +81,9 @@ const updateNext = () => {
     updateNext();
   }
 
-//  console.log("jsonPreferences before origVal", jsonPreferences);
-
   let origVal = jsonPreferences[key];
 
-  //console.log("stringify", JSON.stringify(jsonPreferences));
   jsonPreferences[key] = val;
-  //console.log("stringify", JSON.stringify(jsonPreferences));
-  //debugger;
   fs.writeFile('./app/utils/preferences/preferences.json', JSON.stringify(jsonPreferences), (err) => {
     writeInProgress = false;
     if (err) {
