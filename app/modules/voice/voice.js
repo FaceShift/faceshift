@@ -61,7 +61,7 @@ let trainVoiceModel = async () => {
 
     let interval = setInterval(() => {
         if (modelCount === COMMAND_COUNT) {
-            _startDetecting();
+            start();
             clearInterval(interval)
         }
     }, 1000);

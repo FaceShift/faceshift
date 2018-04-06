@@ -3,7 +3,7 @@ import React from "react";
 import DropDown from "../DropDown/index";
 import {Gestures} from "../../utils/constants/constants";
 import BasicSlider from "../Slider";
-import FlatButton from "material-ui/FlatButton";
+import RaisedButton from "material-ui/RaisedButton";
 import Slider from "material-ui/Slider";
 
 import {Tab, Tabs} from "material-ui/Tabs";
@@ -67,7 +67,7 @@ class Settings extends React.Component {
     );
     renderSaveButton = () => (
         <div>
-            <FlatButton label="Save" disabled={!this.state.didSettingChange && !this.isDropdownSettingValid()}/>
+            <RaisedButton label="Save" disabled={!this.state.didSettingChange && !this.isDropdownSettingValid()} primary={true}/>
         </div>
     );
     renderErrorMessage = () => {
@@ -126,7 +126,7 @@ class Settings extends React.Component {
         <div>
             <Card>
                 <CardText>
-                    <FlatButton label="Train" onClick={() => socket.emit('train')}/>
+                    <RaisedButton label="Train" onClick={() => socket.emit('train')} primary={true}/>
                     <div>
                         {this.state.textToDisplay}
                     </div>
@@ -156,7 +156,7 @@ class Settings extends React.Component {
     renderSettingsButton = () => (
         <div>
             Click to save your new changes
-            <FlatButton label="Save"/>
+            <RaisedButton label="Save" primary={true}/>
         </div>
     );
     renderRightMouseClickDropDown = () => (<DropDown value={0} label="Right Mouse Click"
