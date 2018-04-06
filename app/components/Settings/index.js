@@ -20,9 +20,9 @@ class Settings extends React.Component {
   componentWillMount() {
       socket.on('connect', function () {
           console.log("React connected to socket")
-          socket.emit('training', function (data) {
-              console.log(data); // data will be 'woot'
-          });
+          // socket.emit('training', function (data) {
+          //     console.log(data); // data will be 'woot'
+          // });
       });
   };
 

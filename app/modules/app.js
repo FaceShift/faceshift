@@ -8,7 +8,15 @@ let onTraining = () => {
     voice.trainVoiceModel();
 };
 
-socket.createSocketServer(onTraining);
+let onMicStateChange = (micState) => {
+    if (micState) {
+        voice.start();
+    } else {
+        voice.stop();
+    }
+};
+
+socket.createSocketServer(onTraining, onMicStateChange);
 
 
 preferences.loadPreferences();

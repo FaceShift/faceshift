@@ -18,6 +18,7 @@ function loadModels(voiceModelsDirectory) {
     })
 }
 
+
 function startDetecting(voiceModelsDirectory) {
     console.log('Listening!')
     const detector = new Detector({
@@ -50,12 +51,13 @@ function startDetecting(voiceModelsDirectory) {
     mic.pipe(detector);
 }
 
-let stopDetection = () => {
-    console.log("TODO: STOP")
+let stopDetecting = () => {
+    record.stop();
+    console.log("Stopped listening")
 }
 
 module.exports = {
     loadModels,
     startDetecting,
-    stopDetection
+    stopDetecting
 }

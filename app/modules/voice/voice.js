@@ -1,7 +1,6 @@
 let training = require("./training");
 let snowboy = require("./snowboy");
 
-const FACESHIFT_COMMAND = "faceshift";
 const PAUSE_COMMAND_KEY = "pause";
 const RESUME_COMMAND_KEY = "resume";
 const SCROLL_COMMAND_KEY = "scroll";
@@ -14,6 +13,10 @@ const COMMANDS = {
     mouse: "face shift mouse"
 };
 
+const start = () => {
+    trainVoiceModel();
+};
+
 const stop = () => {
     snowboy.stopDetecting();
 };
@@ -22,7 +25,6 @@ const trainVoiceModel = async () => {
     let untrained = training.indentifyUntrainedCommands(COMMANDS);
     let voiceSamples = await training.recordCommands(untrained, COMMANDS);
     let modelCount = Object.keys(COMMANDS).length - untrained.length;
-    console.log('Initial Model Count', modelCount);
     console.table(voiceSamples);
     Object.keys(voiceSamples).map(
         voiceSample => {
@@ -33,8 +35,6 @@ const trainVoiceModel = async () => {
     )
 
     let interval = setInterval(() => {
-        console.log('Commands Size', Object.keys(COMMANDS).length)
-        console.log('Model Count', modelCount)
         if (modelCount === Object.keys(COMMANDS).length) {
             _detection();
             clearInterval(interval)
@@ -48,6 +48,7 @@ let _detection = () => {
 };
 
 module.exports = {
+    start,
     stop,
     trainVoiceModel
 };

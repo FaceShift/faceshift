@@ -1,9 +1,14 @@
 var io = require("socket.io")(6767);
 
-let createSocketServer = (onTrainingCallback) => {
+let createSocketServer = (onTrainingCallback, micStateCallback) => {
     io.on("connection", function (socket) {
-        socket.on('training', () => {
+        socket.on("training", () => {
             onTrainingCallback();
+        });
+
+        socket.on("microphone", (micState, callback) => {
+            micStateCallback(micState);
+            callback();
         });
 
         socket.on("disconnect", function () {

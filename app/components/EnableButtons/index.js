@@ -13,6 +13,9 @@ import "./styles.css";
 
 import webcam from "../../modules/webcam/webcam";
 
+let io = require('socket.io-client')
+let socket = io("http://localhost:6767");
+
 class EnableButtons extends React.Component{
 
   state = {
@@ -26,7 +29,9 @@ class EnableButtons extends React.Component{
 
 
   onMicrophoneButtonClicked = () => {
-    this.setState({ isMicOn: !this.state.isMicOn});
+    socket.emit('microphone', !this.state.isMicOn, () => {
+        this.setState({ isMicOn: !this.state.isMicOn});
+    })
   };
 
   renderMicrophoneButton = () => (
