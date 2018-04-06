@@ -15,6 +15,9 @@ import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from "mat
 
 import preferencesJSON from "../../utils/preferences/preferences.json";
 
+let io = require('socket.io-client')
+let socket = io("http://localhost:6767");
+
 class Settings extends React.Component {
 
   state = {
@@ -23,6 +26,15 @@ class Settings extends React.Component {
     leftClickValue: 1,
     doubleClickValue: 2,
     didSettingChange: false,
+  };
+
+  componentWillMount() {
+      socket.on('connect', function () {
+          console.log("React connected to socket")
+          // socket.emit('training', function (data) {
+          //     console.log(data); // data will be 'woot'
+          // });
+      });
   };
 
   gesturesToArray = () => {

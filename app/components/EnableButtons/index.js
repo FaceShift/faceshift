@@ -1,5 +1,6 @@
 import React from "react";
 import FlatButton from 'material-ui/FlatButton';
+import ws from "ws";
 
 import MicOnIcon from "material-ui/svg-icons/av/mic";
 import MicOffIcon from "material-ui/svg-icons/av/mic-off";
@@ -11,6 +12,9 @@ import { Modes } from "../../utils/constants/constants";
 import "./styles.css";
 
 import webcam from "../../modules/webcam/webcam";
+
+let io = require('socket.io-client')
+let socket = io("http://localhost:6767");
 
 import * as controller from "../../modules/controller/controller_pref";
 
@@ -28,7 +32,9 @@ class EnableButtons extends React.Component{
 
 
   onMicrophoneButtonClicked = () => {
-    this.setState({ isMicOn: !this.state.isMicOn});
+    socket.emit('microphone', !this.state.isMicOn, () => {
+        this.setState({ isMicOn: !this.state.isMicOn});
+    })
   };
 
   renderMicrophoneButton = () => (

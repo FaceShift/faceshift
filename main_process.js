@@ -15,8 +15,8 @@ let windowPosition = [20, 20];
 
 function createWindow() {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 335, height: 700});
-  //mainWindow.setMenu(null);
+  mainWindow = new BrowserWindow({width: 1000, height: 700});
+  mainWindow.setMenu(null);
 
   resetPos(); // Move window into position
 
@@ -28,7 +28,7 @@ function createWindow() {
   }));
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 
   mainWindow.setAlwaysOnTop(true, "floating");
   mainWindow.setVisibleOnAllWorkspaces(true);
