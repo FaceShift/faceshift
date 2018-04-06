@@ -4,9 +4,9 @@
   MOUTH: "Mouth",
 });
 
-const inputOptions = Object.freeze({
-  leftBlink: "left-blink",
-  rightBlink: "right-blink",
+const InputOptions = Object.freeze({
+  leftblink: "left-blink",
+  rightblink: "right-blink",
   mouth: "mouth",
 });
 
@@ -31,4 +31,5 @@ const MouseModes = Object.freeze({
   drag: "drag"
 });
 
-module.exports = {Modes, Gestures, MouseModes, inputOptions};
+
+module.exports = {Modes, Gestures, MouseModes, InputOptions};
