@@ -67,7 +67,7 @@ class Settings extends React.Component {
   };
 
   renderDropdownOptions = () => this.gesturesToArray(InputOptions).map(
-    (gesture) => <MenuItem value={gesture} primaryText={gesture}/>);
+    (gesture) => <MenuItem key={`${gesture}${new Date()}`}value={gesture} primaryText={gesture}/>);
 
 
   //Options cannot share the same gestures
