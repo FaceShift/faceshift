@@ -74,7 +74,6 @@ class EnableButtons extends React.Component{
   );
 
   render(){
-    console.log("State in EnableButtons", this.state);
     return(
       <div className="container">
         <div className="toggleButton">

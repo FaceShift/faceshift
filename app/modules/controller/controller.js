@@ -201,7 +201,8 @@ const moveMouse = (xy1/*Prev*/, xy2/*New*/, resolution, imageDataCtx) => {
 
     //****************************************************
     //TODO: Replace this with preferences.getSensitivity()
-    let factor = 10; //If sensitivity goes from 0 to 20
+    let factor = 20; //If sensitivity goes from 0 to 20
+    factor = factor * preferences.getSensitivity();
 
     let pt = xy2[0]; //Want to isolate the  middle nose point for certain calculations
     let midHoriz = resolution.height/2;
