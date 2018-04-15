@@ -32,6 +32,10 @@ const setRightClick = (trigger) => {
     updatePreference("right-click", trigger);
 }
 
+const setDoubleClick = (trigger) => {
+    updatePreference("double-click", trigger);
+}
+
 const setTrackBool = (bool) => {
     track = bool;
 }
@@ -56,6 +60,10 @@ const getRightClick = () => {
     return preferences.getRightClick();
 }
 
+const getDoubleClick = () => {
+    return preferences.getDoubleClick();
+}
+
 const getTrackBool = () => {
     return global.track;
 }
@@ -64,8 +72,8 @@ module.exports = {
     updatePreference,
     enterMouseMode, enterScrollMode, enterDragMode,
     getMode,
-    setLeftClick, setRightClick,
-    getLeftClick, getRightClick,
+    setLeftClick, setRightClick, setDoubleClick,
+    getLeftClick, getRightClick, getDoubleClick,
     setTrackBool,
     getTrackBool,
     setSensitivity

@@ -71,9 +71,13 @@ const mouseRightClick = () => {
     robot.mouseClick("right");
 };
 
+const mouseDoubleClick = () => {
+    robot.mouseClick(button="left", double=true);
+};
+
 module.exports = {
     moveUpDown, moveLeftRight,
     dragUpDown, dragLeftRight, toggleBtnUpDwn,
     scrollUpDown,
-    mouseLeftClick, mouseRightClick
+    mouseLeftClick, mouseRightClick, mouseDoubleClick
 };

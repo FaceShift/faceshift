@@ -12,6 +12,9 @@ const InputOptions = constants.InputOptions;
 * right-click:
 * "left-blink", "right-blink", "mouth"
 *
+* double-click:
+* "left-blink", "right-blink", "mouth"
+*
 * sensitivity:
 * 0 -> 1
 */
@@ -27,22 +30,16 @@ const loadPreferences = () => {
             console.log(err);
             //If error reading preferences from json, assume defaults
 
-            /*mode = "mouse";
-            leftClick = "left-blink";
-            rightClick = "right-blink";*/
-
             jsonPreferences = {};
             jsonPreferences["mode"] = MouseModes.mouse;
             jsonPreferences["left-click"] = InputOptions.leftblink;
             jsonPreferences["right-click"] = InputOptions.rightblink;
+            jsonPreferences["double-click"] = InputOptions.mouth;
             jsonPreferences["sensitivity"] = 0.5;
 
             return;
         }
         jsonPreferences = JSON.parse(data);
-        /*mode = jsonPreferences["mode"];
-        leftClick = jsonPreferences["left-click"];
-        rightClick = jsonPreferences["right-click"];*/
     });
 }
 
@@ -56,6 +53,9 @@ const loadPreferences = () => {
 *
 * right-click:
 * "right-blink", ...
+*
+* double-click:
+* "left-blink", ...
 *
 * sensitivity:
 * 0 -> 1
@@ -75,6 +75,8 @@ const updateNext = () => {
     let val = keyVal[1];
 
     //Make sure not to illegally set click method (both click methods may not be mouth):
+    //Should really have checks here for everything, but its all being done in React
+    // anyways, so this is pretty redundant
     if ((key == "left-click" && val == InputOptions.mouth && jsonPreferences["right-click"] == InputOptions.mouth) ||
         (key == "right-click" && val == InputOptions.mouth && jsonPreferences["left-click"] == InputOptions.mouth)) {
         console.log("Could not save user preferences!");
@@ -109,8 +111,12 @@ const getRightClick = () => {
     return jsonPreferences["right-click"];
 }
 
+const getDoubleClick = () => {
+    return jsonPreferences["double-click"]
+};
+
 const getSensitivity = () => {
     return jsonPreferences["sensitivity"];
 }
 
-module.exports = {loadPreferences, updatePreference, getMode, getLeftClick, getRightClick, getSensitivity};
+module.exports = {loadPreferences, updatePreference, getMode, getLeftClick, getRightClick, getDoubleClick, getSensitivity};
