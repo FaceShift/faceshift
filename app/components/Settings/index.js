@@ -91,7 +91,7 @@ class Settings extends React.Component {
     };
     onDoubleClickChange = (event, index, value) => {
       this.setState({doubleClickValue: value, didSettingsChange: true}, () => {
-        this.isDropdownSettingValid() ? console.log("Replace this with controller.setDoubleClick") : ""
+        this.isDropdownSettingValid() ? controller.setDoubleClick(value) : ""
       });
     };
 
