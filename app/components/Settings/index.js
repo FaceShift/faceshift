@@ -37,8 +37,7 @@ class Settings extends React.Component {
     const leftClickValue = preferences["left-click"];
     const sensitivity = preferences["sensitivity"];
     const doubleClickValue = preferences["double-click"];
-
-
+    
     this.setState({
       sensitivityValue: sensitivity,
       rightClickValue: rightClickValue,
@@ -78,20 +77,65 @@ class Settings extends React.Component {
         return this.isDropdownSettingValid() ?
             <div/> : <Card><CardText>You cannot pick the same gestures</CardText></Card>
     };
+
+    setMouseClickValues = () => {
+      controller.setRightClick(this.state.rightClickValue);
+      controller.setLeftClick(this.state.leftClickValue);
+      controller.setDoubleClick(this.state.doubleClickValue);
+    };
+
     onRightClickChange = (event, index, value) => {
+      // If the new setting matches the other options, swap them
+      if (this.state.leftClickValue === value){
+        this.setState({rightClickValue: value, leftClickValue: this.state.rightClickValue, didSettingsChange: true}, () => {
+          this.isDropdownSettingValid() ? this.setMouseClickValues() : ""
+        });
+      }
+      if (this.state.doubleClickValue === value){
+        this.setState({rightClickValue: value, doubleClickValue: this.state.rightClickValue, didSettingsChange: true}, () => {
+          this.isDropdownSettingValid() ? this.setMouseClickValues() : ""
+        });
+      }
+
         this.setState({rightClickValue: value, didSettingsChange: true}, () => {
-            this.isDropdownSettingValid() ? controller.setRightClick(value) : ""
+            this.isDropdownSettingValid() ? this.setMouseClickValues() : ""
         });
     };
+
     onLeftClickChange = (event, index, value) => {
+
+      if (this.state.rightClickValue === value){
+        this.setState({leftClickValue: value, rightClickValue: this.state.leftClickValue, didSettingsChange: true}, () => {
+          this.isDropdownSettingValid() ? this.setMouseClickValues() : ""
+        });
+      }
+
+      if (this.state.doubleClickValue === value){
+        this.setState({leftClickValue: value, doubleClickValue: this.state.leftClickValue, didSettingsChange: true}, () => {
+          this.isDropdownSettingValid() ? this.setMouseClickValues() : ""
+        });
+      }
+
         this.setState({leftClickValue: value, didSettingsChange: true}, () => {
-            this.isDropdownSettingValid() ? controller.setLeftClick(value) : ""
+            this.isDropdownSettingValid() ? this.setMouseClickValues() : ""
 
         });
     };
+
     onDoubleClickChange = (event, index, value) => {
+      if (this.state.leftClickValue === value){
+        this.setState({doubleClickValue: value, leftClickValue: this.state.doubleClickValue, didSettingsChange: true}, () => {
+          this.isDropdownSettingValid() ? this.setMouseClickValues() : ""
+        });
+      }
+      if (this.state.rightClickValue === value){
+        this.setState({doubleClickValue: value, rightClickValue: this.state.doubleClickValue, didSettingsChange: true}, () => {
+          this.isDropdownSettingValid() ? this.setMouseClickValues() : ""
+        });
+      }
+
       this.setState({doubleClickValue: value, didSettingsChange: true}, () => {
-        this.isDropdownSettingValid() ? controller.setDoubleClick(value) : ""
+        this.isDropdownSettingValid() ? this.setMouseClickValues() : ""
       });
     };
 
