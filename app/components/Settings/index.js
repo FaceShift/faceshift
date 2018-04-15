@@ -23,6 +23,30 @@ class Settings extends React.Component {
         didSettingChange: false,
         textToDisplay: "Voice Model untrained",
     };
+
+  componentWillMount() {
+
+    socket.on("message", (message) => {
+      this.setState({textToDisplay: message});
+    });
+
+    socket.emit("lastMessage", "message");
+
+    const preferences = JSON.parse(preferencesJSON);
+    const rightClickValue = preferences["right-click"];
+    const leftClickValue = preferences["left-click"];
+    const sensitivity = preferences["sensitivity"];
+    const doubleClickValue = preferences["double-click"];
+
+
+    this.setState({
+      sensitivityValue: sensitivity,
+      rightClickValue: rightClickValue,
+      leftClickValue: leftClickValue,
+      doubleClickValue: doubleClickValue,
+    })
+  }
+
     gesturesToArray = (gestures) => {
         const gestureArray = [];
         Object.keys(gestures).forEach(
@@ -42,9 +66,6 @@ class Settings extends React.Component {
                     onChange={(event, newValue) => this.onSensitivityChanged(newValue)}/>
         </div>
     );
-    /*******************************************************************************
-     * START OF THE NEW SETTINGS PAGE
-     *******************************************************************************/
 
         // If any of the 3 dropdown settings has the same selection, it is invalid
     isDropdownSettingValid = () => {
@@ -68,6 +89,12 @@ class Settings extends React.Component {
 
         });
     };
+    onDoubleClickChange = (event, index, value) => {
+      this.setState({doubleClickValue: value, didSettingsChange: true}, () => {
+        this.isDropdownSettingValid() ? console.log("Replace this with controller.setDoubleClick") : ""
+      });
+    };
+
     renderRightClick = () => (
         <div>
             <SelectField floatingLabelText="Right Click" value={this.state.rightClickValue}
@@ -76,6 +103,7 @@ class Settings extends React.Component {
             </SelectField>
         </div>
     );
+
     renderLeftClick = () => (
         <div>
             <SelectField floatingLabelText="Left Click" value={this.state.leftClickValue}
@@ -84,6 +112,16 @@ class Settings extends React.Component {
             </SelectField>
         </div>
     );
+
+    renderDoubleClick = () => (
+      <div>
+        <SelectField floatingLabelText="Double Click" value={this.state.doubleClickValue}
+                     onChange={this.onDoubleClickChange}>
+          {this.renderDropdownOptions()}
+        </SelectField>
+      </div>
+    );
+
     renderDropDowns = () => (
         <div>
             <Card>
@@ -91,6 +129,7 @@ class Settings extends React.Component {
                     {this.renderErrorMessage()}
                     {this.renderRightClick()}
                     {this.renderLeftClick()}
+                    {this.renderDoubleClick()}
                     {this.renderSlider()}
                 </CardText>
             </Card>
@@ -123,49 +162,6 @@ class Settings extends React.Component {
             </Tabs>
         </div>
     );
-    /*******************************************************************************
-     * END OF THE NEW SETTINGS PAGE
-     *******************************************************************************/
-
-    renderSettingsButton = () => (
-        <div>
-            Click to save your new changes
-            <RaisedButton label="Save" primary={true}/>
-        </div>
-    );
-    renderRightMouseClickDropDown = () => (<DropDown value={0} label="Right Mouse Click"
-                                                     options={this.gesturesToArray()}
-    />);
-    renderLeftMouseClickDropDown = () => (<DropDown value={1} label="Left Mouse Click"
-                                                    options={this.gesturesToArray()}
-    />);
-    renderDoubleClickDropDown = () => (<DropDown value={2} label="Double Click"
-                                                 options={this.gesturesToArray()}
-    />);
-    renderSensitivitySlider = () => <BasicSlider
-        currentValue={this.state.sensitivityValue}
-        onChange={this.onSensitivityChanged}/>;
-
-    componentWillMount() {
-
-        socket.on("message", (message) => {
-            this.setState({textToDisplay: message});
-        });
-
-        socket.emit("lastMessage", "message");
-
-        const preferences = JSON.parse(preferencesJSON);
-        const rightClickValue = preferences["right-click"];
-        const leftClickValue = preferences["left-click"];
-        const sensitivity = preferences["sensitivity"];
-
-        this.setState({
-            sensitivityValue: sensitivity,
-            rightClickValue: rightClickValue,
-            leftClickValue: leftClickValue,
-            doubleClickValue: 2,
-        })
-    }
 
     render() {
         return this.renderNewSettings();
