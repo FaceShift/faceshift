@@ -1,3 +1,7 @@
+/**
+ * Component that renders the main buttons for FaceShift
+ * Includes the Microphone, Webcam toggle as well as the Radio Buttons
+ */
 import React from "react";
 import FlatButton from "material-ui/FlatButton";
 
@@ -31,6 +35,7 @@ class EnableButtons extends React.Component {
         isMicOn: true,
         isWebcamOn: true,
     };
+
     onHotwordReceived = (hotword) => {
         switch (hotword) {
             case "toggle":
@@ -43,12 +48,20 @@ class EnableButtons extends React.Component {
                 break;
         }
     };
+
+    // Modifies the tracking boolean to the opposite
     onCameraButtonClicked = () => {
         controller.setTrackBool(!this.state.isWebcamOn);
         this.setState({isWebcamOn: !this.state.isWebcamOn});
     };
+
+    // Called when the radio buttons are clicked on
     onRadioButtonToggle = () => {
         const currentMode = this.state.modeValue;
+        // Switches the Mode to the next valid Mode
+        // Mouse -> Scroll
+        // Scroll -> Drag
+        // Drag -> Mouse
         switch (currentMode) {
             case MouseModes.scroll:
                 this.setState({modeValue: MouseModes.drag}, () => controller.enterDragMode());
@@ -64,25 +77,30 @@ class EnableButtons extends React.Component {
                 break;
         }
     };
+
+    // Sends a message over Socket.io when clicked
     onMicrophoneButtonClicked = () => {
         socket.emit("microphone", !this.state.isMicOn, () => {
             this.setState({isMicOn: !this.state.isMicOn});
         });
     };
+
     renderMicrophoneButton = () => (
         <FlatButton
             icon={this.state.isMicOn ? <MicOnIcon/> : <MicOffIcon/>}
             onClick={this.onMicrophoneButtonClicked}
         />
     );
+
     renderCameraButton = () => (
         <FlatButton
             icon={this.state.isWebcamOn ? <WebcamOnIcon/> : <WebcamOffIcon/>}
             onClick={this.onCameraButtonClicked}
         />
     );
+
+    // When radio button is clicked, switch to the respective mode
     onRadioButtonClick = (value) => {
-        console.log("Switched mode to ", value);
         switch (value) {
             case MouseModes.drag:
                 controller.enterDragMode();
@@ -100,8 +118,9 @@ class EnableButtons extends React.Component {
                 break;
         }
     };
+
+    // Render the radio button as a group
     renderMouseModeButton = () => {
-        console.log("state inside the radio", this.state.modeValue);
         return (
             <RadioButtonGroup valueSelected={this.state.modeValue}>
                 {this.renderMouseModeOptions(Modes)}
@@ -109,10 +128,7 @@ class EnableButtons extends React.Component {
         )
     };
 
-    // renderMouseModeButton = () => {
-    //   console.log("renderMouseModeButton", this.state.modeValue);
-    //   return <RadioButtons options={Modes} name="Mouse Modes" onClick={this.onRadioButtonClick} defaultSelected={this.state.modeValue}/>;
-    // };
+    // Render the different Mouse Mode options
     renderMouseModeOptions = (options) => options.map(
         (option) => {
             return <RadioButton label={option.label} styles={styles.radioButton} value={option.value} key={option.label}
@@ -120,11 +136,14 @@ class EnableButtons extends React.Component {
         }
     );
 
+    // Called when the component is about to mount
     componentWillMount() {
+        // Adds a listener for Socket.io that listens to a hot-word
         socket.on("hotword", (hotword) => {
             this.onHotwordReceived(hotword);
         });
 
+        // Gets the preferences from the JSON and sets the mode to that
         const preferences = JSON.parse(preferencesJSON);
         const modeValue = preferences["mode"];
         this.setState({
@@ -133,7 +152,6 @@ class EnableButtons extends React.Component {
     }
 
     render() {
-        console.log("New Mode value is", this.state.modeValue);
         return (
             <div className="container">
                 <div className="toggleButton">
