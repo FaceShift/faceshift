@@ -33,5 +33,5 @@ export SNOWBOY_API=27cacc0c071c70c76b61af43b514ec2453a3584a
 echo "[FACESHIFT] Installing npm dependencies with yarn"
 yarn
 
-echo "[FACESHIFT] FaceShift installed! Run the command 'yarn watch' in terminal with the workign directory set to the installing folder of faceshift"
+echo "[FACESHIFT] FaceShift installed! Run the command 'yarn watch' in terminal with the working directory set to the installing folder of faceshift"
 echo "[FACESHIFT] In another terminal window, navigate to the faceshift installation directory and run the command 'yarn start-mac'"
