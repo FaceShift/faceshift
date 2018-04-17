@@ -1,3 +1,6 @@
+/**
+ * Component for the Sensitivity slider
+ */
 import React from "react";
 import PropTypes from "prop-types";
 import Slider from "material-ui/Slider";
